@@ -1,0 +1,16 @@
+.bg-gradient {
+    background: linear-gradient(to right, #a8e063, #56ab2f);
+  }
+  
+  .card {
+    width: 100%;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 16px;
+  }
+  
+  input::placeholder {
+    color: #aaa;
+    font-style: italic;
+  }
+  
