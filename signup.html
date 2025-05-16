@@ -12,11 +12,11 @@
     <div class="card p-4 shadow-lg rounded-4">
       <h2 class="text-center text-success mb-4">Create an Account</h2>
       <form id="signupForm">
-        <input type="text" class="form-control mb-3" placeholder="Name" required />
-        <input type="email" class="form-control mb-3" placeholder="Email" required />
-        <input type="password" class="form-control mb-3" placeholder="Password" required />
-        <input type="text" class="form-control mb-3" placeholder="Location" />
-        <button type="submit" class="btn btn-success w-100">Sign Up</button>
+        <input type="text" id="name" class="form-control mb-3" placeholder="Name" required />
+        <input type="email" id="email"class="form-control mb-3" placeholder="Email" required />
+        <input type="password" id="password" class="form-control mb-3" placeholder="Password" required />
+        <input type="text" id="location" class="form-control mb-3" placeholder="Location" />
+        <button type="submit" id=submit class="btn btn-success w-100">Sign Up</button>
       </form>
       <p class="text-center mt-3">
         Already have an account?
@@ -24,6 +24,25 @@
       </p>
     </div>
   </div>
-  <script src="script.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+        await userCredential.user.updateProfile({ displayName: name });
+        alert("Signup successful!");
+        window.location.href = "index.html";
+      } catch (error) {
+        alert("Signup failed oh no: " + error.message);
+      }
+    });
+  </script>
 </body>
 </html>
