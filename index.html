@@ -12,9 +12,9 @@
     <div class="card p-4 shadow-lg rounded-4">
       <h2 class="text-center text-success mb-4">Login to EcoSwap</h2>
       <form id="loginForm">
-        <input type="email" class="form-control mb-3" placeholder="Email" required />
-        <input type="password" class="form-control mb-3" placeholder="Password" required />
-        <button type="submit" class="btn btn-success w-100">Login</button>
+        <input type="email" id="loginEmail" class="form-control mb-3" placeholder="Email" required />
+        <input type="password" id="loginPassword" class="form-control mb-3" placeholder="Password" required />
+        <button type="submit" id="submit" class="btn btn-success w-100">Login</button>
       </form>
       <p class="text-center mt-3">
         Don’t have an account?
@@ -22,6 +22,24 @@
       </p>
     </div>
   </div>
-  <script src="script.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+
+      try {
+        await firebase.auth().signInWithEmailAndPassword(email, password);
+        alert("Login successful!");
+        // Redirect to home/dashboard
+        window.location.href = "home.html"; 
+      } catch (error) {
+        alert("Login failed: " + error.message);
+      }
+    });
+  </script>
 </body>
 </html>
