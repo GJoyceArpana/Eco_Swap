@@ -113,10 +113,46 @@ function submitForm(event) {
   }
 }
 
-function finalSubmit() {
-  alert("Item submitted successfully!");
-  document.getElementById("itemForm").reset();
-  document.getElementById("imagePreviewContainer").innerHTML = "";
-  uploadedImages = [];
-  document.getElementById("reviewSection").style.display = "none";
+async function finalSubmit() {
+  const form = document.getElementById("itemForm");
+  const formData = new FormData();
+
+  // Append text fields
+  formData.append("itemName", document.getElementById("itemName").value);
+  formData.append("itemDescription", document.getElementById("description").value);
+  formData.append("itemCategory", document.getElementById("category").value);
+  formData.append("itemCondition", document.getElementById("itemCondition").value);
+  formData.append("itemAction", document.getElementById("itemAction").value);
+  formData.append("location", document.getElementById("location").value);
+  formData.append("email", document.getElementById("email").value);
+  formData.append("phone", document.getElementById("phone").value);
+  formData.append("userId", "user123"); // Replace with actual userId logic
+
+  // Append image files
+  uploadedImages.forEach((img, index) => {
+    formData.append("images", img.file);
+  });
+
+  try {
+  const response = await fetch('http://localhost:3000/submit-item', {
+
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      alert("Item submitted successfully!");
+      form.reset();
+      uploadedImages = [];
+      document.getElementById("imagePreviewContainer").innerHTML = "";
+      document.getElementById("reviewSection").style.display = "none";
+    } else {
+      alert("Submission failed: " + result.message);
+    }
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    alert("Something went wrong while submitting.");
+  }
 }
