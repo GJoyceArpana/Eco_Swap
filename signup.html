@@ -10,13 +10,13 @@
 <body class="bg-gradient">
   <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="card p-4 shadow-lg rounded-4">
-      <h2 class="text-center text-success mb-4">Create an Account</h2>
+      <h2 class="text-center mb-4" style="color: #4b6cb7;">Create an Account</h2>
       <form id="signupForm">
         <input type="text" id="name" class="form-control mb-3" placeholder="Name" required />
-        <input type="email" id="email"class="form-control mb-3" placeholder="Email" required />
+        <input type="email" id="email" class="form-control mb-3" placeholder="Email" required />
         <input type="password" id="password" class="form-control mb-3" placeholder="Password" required />
         <input type="text" id="location" class="form-control mb-3" placeholder="Location" />
-        <button type="submit" id=submit class="btn btn-success w-100">Sign Up</button>
+        <button type="submit" id="submit" class="btn w-100" style="background-color: #4b6cb7; color: white;">Sign Up</button>
       </form>
       <p class="text-center mt-3">
         Already have an account?
@@ -24,9 +24,13 @@
       </p>
     </div>
   </div>
+
+  <!-- Firebase Setup -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="firebase-config.js"></script>
+
+  <!-- Firebase Auth Logic -->
   <script>
     document.getElementById("signupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
