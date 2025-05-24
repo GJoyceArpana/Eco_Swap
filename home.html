@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoSwap | Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          animation: {
+            'spin-slow': 'spin 3s linear infinite',
+            'bounce-slow': 'bounce 2s infinite',
+            'pulse-slow': 'pulse 3s infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'wave': 'wave 2.5s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            wave: {
+              '0%': { transform: 'rotate(0deg)' },
+              '10%': { transform: 'rotate(14deg)' },
+              '20%': { transform: 'rotate(-8deg)' },
+              '30%': { transform: 'rotate(14deg)' },
+              '40%': { transform: 'rotate(-4deg)' },
+              '50%': { transform: 'rotate(10deg)' },
+              '60%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(0deg)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-[#4b6cb7] to-[#182848] min-h-screen text-gray-800 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-sm dark:bg-gray-800">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="#" class="text-[#4b6cb7] font-bold text-xl dark:text-blue-300">EcoSwap</a>
+      <div class="flex items-center space-x-4">
+        <!-- Dark/Light Mode Toggle -->
+        <button id="themeToggle" class="p-2 rounded-full focus:outline-none">
+          <svg id="themeIconSun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+          <svg id="themeIconMoon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-300 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+        </button>
+        
+        <div class="relative">
+          <button id="menuButton" class="border border-[#4b6cb7] text-[#4b6cb7] px-4 py-2 rounded hover:bg-[#4b6cb7] hover:text-white transition dark:border-blue-300 dark:text-blue-300 dark:hover:bg-blue-800">Menu</button>
+          <ul id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded hidden z-50 dark:bg-gray-700">
+            <div id="authLinks">
+              <li><a href="signup.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Sign Up</a></li>
+              <li><a href="login.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Login</a></li>
+              <li><hr class="my-1 border-gray-300 dark:border-gray-600"></li>
+            </div>
+            <li><a href="dashboard.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Dashboard</a></li>
+            <li><a href="greenpoints.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Green Points</a></li>
+            <li><a href="helpdesk.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Help Desk</a></li>
+            <li id="logoutDivider" class="my-1 border-t border-gray-300 dark:border-gray-600 hidden"></li>
+            <li id="logoutLink" class="hidden"><a href="#" id="logoutButton" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="text-center text-white py-20 bg-black bg-opacity-20 dark:bg-opacity-40">
+    <div class="container mx-auto">
+      <h1 class="text-5xl font-bold animate-[fadeIn_1s_ease-in-out]">Swap. Save. Sustain.</h1>
+      <p class="mt-4 text-xl animate-[fadeIn_1.5s_ease-in-out]">Give your unused items a new life. Earn GreenPoints and help the planet!</p>
+      <div class="mt-8 animate-float">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-16 bg-white text-center dark:bg-gray-800">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold text-[#4b6cb7] mb-10 dark:text-blue-300 animate-[fadeIn_1s_ease-in-out]">Why EcoSwap?</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="transform transition hover:scale-105 duration-300">
+          <div class="w-24 h-24 mx-auto flex items-center justify-center text-6xl text-[#6a8bd8] animate-spin-slow dark:text-blue-400">♻</div>
+          <h5 class="mt-4 text-xl text-[#4b6cb7] font-semibold dark:text-blue-300">Eco-Friendly</h5>
+          <p class="dark:text-gray-300">Reduce waste and promote reuse by sharing items with your community.</p>
+        </div>
+        <div class="transform transition hover:scale-105 duration-300">
+          <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-[#6a8bd8] to-[#3a56a0] shadow-lg flex items-center justify-center text-white font-bold text-lg animate-[spin_1.5s_linear_infinite] dark:from-blue-500 dark:to-blue-700">GP</div>
+          <h5 class="mt-4 text-xl text-[#4b6cb7] font-semibold dark:text-blue-300">Earn GreenPoints</h5>
+          <p class="dark:text-gray-300">Get rewarded for every swap you make and unlock badges!</p>
+        </div>
+        <div class="transform transition hover:scale-105 duration-300">
+          <div class="w-12 h-12 mx-auto text-[#4b6cb7] text-5xl animate-wave dark:text-blue-400">🤝</div>
+          <h5 class="mt-4 text-xl text-[#4b6cb7] font-semibold dark:text-blue-300">Connect Locally</h5>
+          <p class="dark:text-gray-300">Find items and share them with people in your neighborhood.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="py-16 bg-gray-100 text-center dark:bg-gray-700">
+    <div class="container mx-auto">
+      <h2 class="text-3xl font-bold text-[#4b6cb7] mb-10 dark:text-blue-300">How It Works</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="bg-white p-6 rounded shadow border-t-4 border-[#6a8bd8] transform transition hover:-translate-y-1 duration-300 dark:bg-gray-800 dark:border-blue-400">
+          <div class="w-12 h-12 mx-auto mb-4 bg-[#6a8bd8] text-white rounded-full flex items-center justify-center text-xl font-bold animate-bounce-slow dark:bg-blue-500">1</div>
+          <h4 class="text-[#4b6cb7] text-lg font-bold mb-2 dark:text-blue-300">Sign Up</h4>
+          <p class="dark:text-gray-300">Create your account and set your location.</p>
+        </div>
+        <div class="bg-white p-6 rounded shadow border-t-4 border-[#6a8bd8] transform transition hover:-translate-y-1 duration-300 dark:bg-gray-800 dark:border-blue-400">
+          <div class="w-12 h-12 mx-auto mb-4 bg-[#6a8bd8] text-white rounded-full flex items-center justify-center text-xl font-bold animate-bounce-slow dark:bg-blue-500" style="animation-delay: 0.2s">2</div>
+          <h4 class="text-[#4b6cb7] text-lg font-bold mb-2 dark:text-blue-300">List or Request</h4>
+          <p class="dark:text-gray-300">Add items to share or request what you need.</p>
+        </div>
+        <div class="bg-white p-6 rounded shadow border-t-4 border-[#6a8bd8] transform transition hover:-translate-y-1 duration-300 dark:bg-gray-800 dark:border-blue-400">
+          <div class="w-12 h-12 mx-auto mb-4 bg-[#6a8bd8] text-white rounded-full flex items-center justify-center text-xl font-bold animate-bounce-slow dark:bg-blue-500" style="animation-delay: 0.4s">3</div>
+          <h4 class="text-[#4b6cb7] text-lg font-bold mb-2 dark:text-blue-300">Meet & Exchange</h4>
+          <p class="dark:text-gray-300">Connect with users and make the swap offline.</p>
+        </div>
+        <div class="bg-white p-6 rounded shadow border-t-4 border-[#6a8bd8] transform transition hover:-translate-y-1 duration-300 dark:bg-gray-800 dark:border-blue-400">
+          <div class="w-12 h-12 mx-auto mb-4 bg-[#6a8bd8] text-white rounded-full flex items-center justify-center text-xl font-bold animate-bounce-slow dark:bg-blue-500" style="animation-delay: 0.6s">4</div>
+          <h4 class="text-[#4b6cb7] text-lg font-bold mb-2 dark:text-blue-300">Earn Points</h4>
+          <p class="dark:text-gray-300">Confirm the swap and earn GreenPoints!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  
+
+  <!-- Footer -->
+  <footer class="bg-[#182848] text-white text-center py-4 dark:bg-gray-900">
+    <p class="mb-0">© 2025 EcoSwap — Swap Sustainably <span class="animate-pulse-slow">🌿</span></p>
+  </footer>
+
+  <!-- JS Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+      const authLinks = document.getElementById('authLinks');
+      const logoutDivider = document.getElementById('logoutDivider');
+      const logoutLink = document.getElementById('logoutLink');
+      const menuButton = document.getElementById('menuButton');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIconSun = document.getElementById('themeIconSun');
+      const themeIconMoon = document.getElementById('themeIconMoon');
+
+      // Menu toggle
+      menuButton.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('hidden');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!menuButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+          dropdownMenu.classList.add('hidden');
+        }
+      });
+
+      // Auth state
+      if (isLoggedIn) {
+        authLinks.classList.add('hidden');
+        logoutDivider.classList.remove('hidden');
+        logoutLink.classList.remove('hidden');
+      }
+
+      // Logout
+      document.getElementById('logoutButton')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        sessionStorage.removeItem('isLoggedIn');
+        window.location.href = 'index.html';
+      });
+
+      // Theme toggle
+      themeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        const isDark = document.documentElement.classList.contains('dark');
+        localStorage.setItem('darkMode', isDark);
+        themeIconSun.classList.toggle('hidden', isDark);
+        themeIconMoon.classList.toggle('hidden', !isDark);
+      });
+
+      // Check for saved theme preference
+      if (localStorage.getItem('darkMode') === 'true' || 
+          (!localStorage.getItem('darkMode') && 
+           window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        themeIconSun.classList.add('hidden');
+        themeIconMoon.classList.remove('hidden');
+      } else {
+        document.documentElement.classList.remove('dark');
+        themeIconSun.classList.remove('hidden');
+        themeIconMoon.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
