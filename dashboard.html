@@ -1,11 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dynamic User Dashboard</title>
   <link rel="stylesheet" href="dashboard.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .clickable-header {
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .clickable-header:hover {
+      color: #4b6cb7;
+      text-decoration: underline;
+    }
+    .add-item-btn, .request-item-btn {
+      background-color: #4b6cb7;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+    .add-item-btn:hover, .request-item-btn:hover {
+      background-color: #3a56a0;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -57,7 +80,6 @@
         <div class="card chart-card">
           <h3>Activity Breakdown</h3>
           <canvas id="activityChart" width="150" height="150"></canvas>
-
           <div class="legend">
             <div><span class="legend-color lend"></span>Lend</div>
             <div><span class="legend-color donation"></span>Donation</div>
@@ -68,12 +90,14 @@
 
       <div class="row">
         <div class="card chart-card">
-          <h3>Requested Items</h3>
+          <h3 class="clickable-header" id="requestedItemsHeader">Requested Items</h3>
+          <button class="request-item-btn" id="requestItemBtn">Request New Item</button>
           <ul class="item-list" id="requestedItemsList"></ul>
           <canvas id="requestedItemsChart"></canvas>
         </div>
         <div class="card chart-card">
-          <h3>Added Items</h3>
+          <h3 class="clickable-header" id="addedItemsHeader">Added Items</h3>
+          <button class="add-item-btn" id="addItemBtn">Add New Item</button>
           <ul class="item-list" id="addedItemsList"></ul>
           <canvas id="addedItemsChart"></canvas>
         </div>
@@ -108,6 +132,40 @@
     </main>
   </div>
 
+  <script>
+    // Add redirection functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Request Item functionality
+      document.getElementById('requestedItemsHeader').addEventListener('click', function() {
+        window.location.href = 'reqitem.html';
+      });
+      
+      document.getElementById('requestItemBtn').addEventListener('click', function() {
+        window.location.href = 'reqitem.html';
+      });
+
+      // Add Item functionality
+      document.getElementById('addedItemsHeader').addEventListener('click', function() {
+        window.location.href = 'newitem.html';
+      });
+      
+      document.getElementById('addItemBtn').addEventListener('click', function() {
+        window.location.href = 'newitem.html';
+      });
+
+      // Sign out functionality
+      document.getElementById('signOutBtn').addEventListener('click', function() {
+        // Clear authentication data
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userEmail');
+        // Redirect to login page
+        window.location.href = 'login.html';
+      });
+
+      // Rest of your dashboard.js functionality can go here
+      // Or you can keep it in the external dashboard.js file
+    });
+  </script>
   <script src="dashboard.js"></script>
 </body>
 </html>
