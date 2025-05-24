@@ -48,7 +48,7 @@ signUp.addEventListener('click', async (event) => {
     await setDoc(doc(db, "users", user.uid), userData);
 
     alert("Account created successfully!");
-    window.location.href = 'index.html'; // redirect to home or login
+    window.location.href = 'login.html'; // redirect to home or login
   } catch (error) {
     if (error.code === 'auth/email-already-in-use') {
       alert("Email already in use. Try logging in.");
