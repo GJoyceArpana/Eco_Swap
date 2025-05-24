@@ -21,18 +21,23 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static("public")); // serve static files like HTML/CSS
 
-// Multer configuration for image uploads
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+// Serve all static files (HTML, JS, CSS) from root directory
+app.use(express.static(__dirname));
 
-// Serve HTML page (newitems.html)
+// Serve HTML pages
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "newitems.html"));
 });
 
-// Handle item submission
+app.get("/reqitem", (req, res) => {
+  res.sendFile(path.join(__dirname, "reqitem.html"));
+});
+
+// Handle new item submission with image uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 app.post("/submit-item", upload.array("images", 4), async (req, res) => {
   try {
     const {
@@ -44,7 +49,7 @@ app.post("/submit-item", upload.array("images", 4), async (req, res) => {
       location,
       email,
       phone,
-      userId,
+      userId
     } = req.body;
 
     const images = req.files;
@@ -63,12 +68,48 @@ app.post("/submit-item", upload.array("images", 4), async (req, res) => {
       imageCount: images.length,
     };
 
-    // Save item data in Firestore
     await db.collection("items").add(itemData);
 
     res.status(200).json({ success: true, message: "Item stored in Firestore!" });
   } catch (error) {
     console.error("Error submitting item:", error);
+    res.status(500).json({ success: false, message: "Internal server error." });
+  }
+});
+
+// Handle requested item submission
+app.post("/submit-request", async (req, res) => {
+  try {
+    const {
+      category,
+      itemName,
+      description,
+      condition,
+      location,
+      email,
+      phone
+    } = req.body;
+
+    if (!itemName || !email || !phone) {
+      return res.status(400).json({ success: false, message: "Missing required fields." });
+    }
+
+    const requestData = {
+      category,
+      itemName,
+      description,
+      condition,
+      location,
+      email,
+      phone,
+      timestamp: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    await db.collection("requested_items").add(requestData);
+
+    res.status(200).json({ success: true, message: "Requested item submitted successfully!" });
+  } catch (error) {
+    console.error("Error submitting requested item:", error);
     res.status(500).json({ success: false, message: "Internal server error." });
   }
 });
