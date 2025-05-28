@@ -1,9 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Item Swap | Add New Item</title>
   <link rel="stylesheet" href="newitem.css" />
+  <!-- Your App Logic -->
+  <script type="module" src="newitem.js"></script>
 </head>
 <body>
   <!-- Hero Section -->
@@ -16,7 +19,7 @@
 
   <!-- Form Section -->
   <section class="form-section">
-    <form id="itemForm" onsubmit="submitForm(event)">
+    <form id="itemForm">
       <h2>Add New Item</h2>
 
       <div class="form-group">
@@ -39,27 +42,26 @@
 
       <div class="form-group">
         <label for="description">Description:</label>
-        <textarea id="description" rows="3"  placeholder="Describe the item..."></textarea>
+        <textarea id="description" rows="3" placeholder="Describe the item..."></textarea>
         <span class="error" id="error-description"></span>
       </div>
 
       <div class="form-group">
-          <label>Condition:</label>
-          <input type="text" id="itemCondition" placeholder="e.g., Like new, Used" />
-          <span class="error" id="error-itemCondition"></span>
-    </div>
+        <label>Condition:</label>
+        <input type="text" id="itemCondition" placeholder="e.g., Like new, Used" />
+        <span class="error" id="error-itemCondition"></span>
+      </div>
 
-    <div class="form-group">
-          <label>Action:</label>
-          <select id="itemAction">
-            <option value="">Select action</option>
-            <option>Swap</option>
-            <option>Lend</option>
-            <option>Donate</option>
-          </select>
-          <span class="error" id="error-itemAction"></span>
-        </div>
-
+      <div class="form-group">
+        <label>Action:</label>
+        <select id="itemAction">
+          <option value="">Select action</option>
+          <option>Swap</option>
+          <option>Lend</option>
+          <option>Donate</option>
+        </select>
+        <span class="error" id="error-itemAction"></span>
+      </div>
 
       <div class="form-group">
         <label for="location">Location:</label>
@@ -69,21 +71,21 @@
 
       <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" id="email" placeholder="tejumk0297@gmail.com" />
+        <input type="email" id="email" placeholder="example@gmail.com" />
         <span class="error" id="error-email"></span>
       </div>
 
       <div class="form-group">
         <label for="phone">Phone:</label>
-        <input type="tel" id="phone" maxlength="10"  placeholder="7975745570"/>
+        <input type="tel" id="phone" maxlength="10" placeholder="1234567890"/>
         <span class="error" id="error-phone"></span>
       </div>
 
       <!-- Custom Image Upload -->
       <div class="form-group">
         <label>Upload Photos (Max 4):</label>
-        <input type="file" id="itemPhotos" accept="image/*" multiple hidden onchange="handleImageUpload(event)" />
-        <button type="button" class="upload-btn" onclick="document.getElementById('itemPhotos').click()">Choose Images</button>
+        <input type="file" id="itemPhotos" accept="image/*" multiple hidden />
+        <button type="button" class="upload-btn" id="chooseImagesBtn">Choose Images</button>
         <span class="error" id="error-itemPhotos"></span>
         <div id="imagePreviewContainer" class="image-preview-container"></div>
       </div>
@@ -91,17 +93,14 @@
       <button type="submit" class="submit-btn">Next</button>
     </form>
   </section>
-    
+
   <!-- Review Section (Initially hidden) -->
   <section id="reviewSection" style="display:none; margin-top: 30px;">
     <h3>Review Your Details</h3>
     <p><strong>Email:</strong> <span id="reviewEmail"></span></p>
     <p><strong>Phone:</strong> <span id="reviewPhone"></span></p>
     <p><strong>Item Name:</strong> <span id="reviewName"></span></p>
-    <button type="button" class="submit-btn" onclick="finalSubmit()">Confirm & Submit</button>
+    <button type="button" class="submit-btn" id="finalSubmitBtn">Confirm & Submit</button>
   </section>
-  
-
-  <script src="newitem.js"></script>
 </body>
 </html>
