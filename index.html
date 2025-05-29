@@ -1,213 +1,390 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EcoSwap | Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoSwap | Share • Swap • Earn GreenPoints</title>
+
+  <!-- Meta -->
+  <meta name="description"
+        content="EcoSwap is a sustainable sharing platform where you can give, swap, or lend everyday items, earn GreenPoints, and build community." />
+
+  <!-- Fonts & Tailwind -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="./logo.png" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind overrides -->
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
+          colors: {
+            primary  : '#4b6cb7',
+            secondary: '#3b5998',
+            accent   : '#5f86d2',
+            light    : '#b0c7f7',
+            dark     : '#2c3e91',
+          },
+          fontFamily: {
+            sans : ['Poppins', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
           animation: {
-            'spin-slow': 'spin 3s linear infinite',
-            'bounce-slow': 'bounce 2s infinite',
-            'pulse-slow': 'pulse 3s infinite',
-            'float': 'float 6s ease-in-out infinite',
-            'wave': 'wave 2.5s linear infinite',
+            float: 'float 6s ease-in-out infinite',
           },
           keyframes: {
             float: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-10px)' },
-            },
-            wave: {
-              '0%': { transform: 'rotate(0deg)' },
-              '10%': { transform: 'rotate(14deg)' },
-              '20%': { transform: 'rotate(-8deg)' },
-              '30%': { transform: 'rotate(14deg)' },
-              '40%': { transform: 'rotate(-4deg)' },
-              '50%': { transform: 'rotate(10deg)' },
-              '60%': { transform: 'rotate(0deg)' },
-              '100%': { transform: 'rotate(0deg)' },
+              '0%,100%': { transform:'translateY(0)' },
+              '50%'   : { transform:'translateY(-14px)' }
             }
           }
         }
       }
     }
   </script>
+
+  <style>
+    .gradient-text{
+      background:linear-gradient(90deg,#4b6cb7 0%,#3b5998 100%);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    /* linear backdrop strip */
+    .gradient-bg{
+      background:linear-gradient(135deg,rgba(75,108,183,.10) 0%,rgba(59,89,152,.10) 100%);
+    }
+    /* radial "blob" overlay */
+    .hero-bg{
+      background:
+        radial-gradient(circle at top left,rgba(75,108,183,.15),transparent 60%),
+        radial-gradient(circle at bottom right,rgba(75,108,183,.10),transparent 60%);
+    }
+    /* subtle leaf tile */
+    .leaf-pattern{
+      background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54 50c-4-4-8-8-14-8s-10 4-14 8-8 8-8 14 4 10 8 14 8 8 14 8 10-4 14-8 8-8 8-14-4-10-8-14zM0 0h60v60H0V0zm20 20v20h20V20H20zm4 4h12v12H24V24z' fill='%234b6cb7' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+    
+    /* Dark mode overrides */
+    .dark .gradient-bg {
+      background: linear-gradient(135deg, rgba(75, 108, 183, 0.2) 0%, rgba(59, 89, 152, 0.2) 100%);
+    }
+    .dark .hero-bg {
+      background:
+        radial-gradient(circle at top left, rgba(75, 108, 183, 0.25), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(75, 108, 183, 0.2), transparent 60%);
+    }
+    .dark .leaf-pattern {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54 50c-4-4-8-8-14-8s-10 4-14 8-8 8-8 14 4 10 8 14 8 8 14 8 10-4 14-8 8-8 8-14-4-10-8-14zM0 0h60v60H0V0zm20 20v20h20V20H20zm4 4h12v12H24V24z' fill='%234b6cb7' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-[#4b6cb7] to-[#182848] min-h-screen text-gray-800 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800">
-  <!-- Navbar -->
-  <nav class="bg-white shadow-sm dark:bg-gray-800">
-    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-      <a href="#" class="text-[#4b6cb7] font-bold text-xl dark:text-blue-300">EcoSwap</a>
-      <div class="flex items-center space-x-4">
-        <!-- Dark/Light Mode Toggle -->
-        <button id="themeToggle" class="p-2 rounded-full focus:outline-none">
-          <svg id="themeIconSun" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-          <svg id="themeIconMoon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-300 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+
+<body class="font-sans text-gray-800 antialiased scroll-smooth dark:bg-gray-900 dark:text-gray-200">
+
+<!-- ╭─────────────── Navbar ───────────────╮ -->
+<nav class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur shadow-sm dark:bg-gray-800/90">
+  <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#" class="flex items-center space-x-3">
+      <img src="./logo.png" alt="EcoSwap logo" class="h-16 w-auto">
+      <span class="text-2xl font-bold gradient-text">EcoSwap</span>
+    </a>
+
+    <div class="hidden md:flex items-center space-x-8">
+      <a href="#workflow"  class="font-medium hover:text-primary dark:hover:text-light">How&nbsp;It&nbsp;Works</a>
+      <a href="#rewards"   class="font-medium hover:text-primary dark:hover:text-light">GreenPoints</a>
+      <a href="dashboard.html"  class="font-medium hover:text-primary dark:hover:text-light">Dashboard</a>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <!-- Dark mode toggle -->
+      <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+        <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+        <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path>
+        </svg>
+      </button>
+      
+      <!-- Auth buttons (will be hidden when logged in) -->
+      <div id="auth-buttons" class="flex items-center space-x-4">
+        <a href="login.html" class="px-4 py-2 font-medium hover:text-primary dark:hover:text-light">Login</a>
+        <a href="signup.html" class="px-6 py-2 bg-primary text-white rounded-full shadow hover:bg-accent transition">Sign&nbsp;Up</a>
+      </div>
+      
+      <!-- User dropdown (will be shown when logged in) -->
+      <div id="user-dropdown" class="hidden items-center space-x-2">
+        <button class="flex items-center space-x-2 focus:outline-none">
+          <span class="font-medium">User</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
         </button>
-        
-        <div class="relative">
-          <button id="menuButton" class="border border-[#4b6cb7] text-[#4b6cb7] px-4 py-2 rounded hover:bg-[#4b6cb7] hover:text-white transition dark:border-blue-300 dark:text-blue-300 dark:hover:bg-blue-800">Menu</button>
-          <ul id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded hidden z-50 dark:bg-gray-700">
-            <div id="authLinks">
-              <li><a href="signup.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Sign Up</a></li>
-              <li><a href="login.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Login</a></li>
-              <li><hr class="my-1 border-gray-300 dark:border-gray-600"></li>
-            </div>
-            <li><a href="dashboard.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Dashboard</a></li>
-            <li><a href="greenpoints.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Green Points</a></li>
-            <li><a href="helpdesk.html" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Help Desk</a></li>
-            <li id="logoutDivider" class="my-1 border-t border-gray-300 dark:border-gray-600 hidden"></li>
-            <li id="logoutLink" class="hidden"><a href="#" id="logoutButton" class="block px-4 py-2 hover:bg-[#ebf0fa] text-[#182848] dark:hover:bg-gray-600 dark:text-gray-200">Logout</a></li>
-          </ul>
-        </div>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- Hero -->
-  <section class="text-center text-white py-20 bg-black bg-opacity-20 dark:bg-opacity-40">
-    <div class="container mx-auto">
-      <h1 class="text-5xl font-bold animate-[fadeIn_1s_ease-in-out]">Swap. Save. Sustain.</h1>
-      <p class="mt-4 text-xl animate-[fadeIn_1.5s_ease-in-out]">Give your unused items a new life. Earn GreenPoints and help the planet!</p>
-      <div class="mt-8 animate-float">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-green-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-        </svg>
+<!-- ╭─────────────── Hero ───────────────╮ -->
+<section class="pt-32 pb-24 gradient-bg leaf-pattern hero-bg relative overflow-hidden">
+  <div class="container mx-auto px-6 flex flex-col lg:flex-row items-center">
+    <!-- Text -->
+    <div class="lg:w-1/2 lg:pr-6 mb-16 lg:mb-0">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-tight mb-6">
+        <span class="gradient-text">Share More,</span><br>Waste Less.
+      </h1>
+
+      <p class="text-lg text-gray-600 dark:text-gray-300 mb-10 max-w-lg">
+        Give, swap or lend everyday items with people nearby and earn
+        <strong>GreenPoints</strong> for every eco-friendly exchange.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="#workflow" class="px-8 py-3 border-2 border-primary text-primary rounded-full font-medium hover:bg-primary/10 transition flex items-center justify-center gap-2 dark:text-light dark:border-light dark:hover:bg-gray-700">
+          <span>How&nbsp;It&nbsp;Works</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
       </div>
     </div>
-  </section>
 
-  <!-- Features -->
-  <section class="py-16 bg-white text-center dark:bg-gray-800">
-    <div class="container mx-auto">
-      <h2 class="text-3xl font-bold text-[#4b6cb7] mb-10 dark:text-blue-300 animate-[fadeIn_1s_ease-in-out]">Why EcoSwap?</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-        <div class="transform transition hover:scale-105 duration-300">
-          <div class="w-24 h-24 mx-auto flex items-center justify-center text-6xl text-[#6a8bd8] animate-spin-slow dark:text-blue-400">♻</div>
-          <h5 class="mt-4 text-xl text-[#4b6cb7] font-semibold dark:text-blue-300">Eco-Friendly</h5>
-          <p class="dark:text-gray-300">Reduce waste and promote reuse by sharing items with your community.</p>
+    <!-- Image -->
+    <div class="lg:w-1/2 relative">
+      <div class="relative z-10 max-w-lg mx-auto">
+        <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=800&q=80"
+             alt="People swapping items" class="rounded-2xl shadow-2xl" loading="lazy">
+      </div>
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full"></div>
+      <div class="absolute -bottom-12 -right-12 w-20 h-20 bg-accent/10 rounded-full"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ╭─────────────── Features ───────────────╮ -->
+<section class="py-16 bg-white dark:bg-gray-800">
+  <div class="container mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">
+        Why Choose <span class="gradient-text">EcoSwap</span>
+      </h2>
+      <p class="text-lg text-gray-600 dark:text-gray-300">The sustainable way to share resources in your community.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <!-- Feature cards -->
+      <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition dark:bg-gray-700 dark:hover:shadow-lg">
+        <div class="w-16 h-16 mb-6 flex items-center justify-center bg-primary/10 rounded-full">
+          <svg class="w-8 h-8 text-primary dark:text-light" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M21 16V8a2 2 0 0 0-2-2h-4M3 8v8a2 2 0 0 0 2 2h4M7 21v-6M17 3v6"/>
+          </svg>
         </div>
-        <div class="transform transition hover:scale-105 duration-300">
-          <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-[#6a8bd8] to-[#3a56a0] shadow-lg flex items-center justify-center text-white font-bold text-lg animate-[spin_1.5s_linear_infinite] dark:from-blue-500 dark:to-blue-700">GP</div>
-          <h5 class="mt-4 text-xl text-[#4b6cb7] font-semibold dark:text-blue-300">Earn GreenPoints</h5>
-          <p class="dark:text-gray-300">Get rewarded for every swap you make and unlock badges!</p>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">Easy Listings</h3>
+        <p class="text-gray-600 dark:text-gray-300">Post an item in seconds with photos, categories, and location tags.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition dark:bg-gray-700 dark:hover:shadow-lg">
+        <div class="w-16 h-16 mb-6 flex items-center justify-center bg-primary/10 rounded-full">
+          <svg class="w-8 h-8 text-primary dark:text-light" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M9 12l2 2 4-4M21 12A9 9 0 1 1 12 3"/>
+          </svg>
         </div>
-        <div class="transform transition hover:scale-105 duration-300">
-          <div class="w-12 h-12 mx-auto text-[#4b6cb7] text-5xl animate-wave dark:text-blue-400">🤝</div>
-          <h5 class="mt-4 text-xl text-[#4b6cb7] font-semibold dark:text-blue-300">Connect Locally</h5>
-          <p class="dark:text-gray-300">Find items and share them with people in your neighborhood.</p>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">GreenPoint Rewards</h3>
+        <p class="text-gray-600 dark:text-gray-300">Earn points when your swap is confirmed (+10) and completed (+20).</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition dark:bg-gray-700 dark:hover:shadow-lg">
+        <div class="w-16 h-16 mb-6 flex items-center justify-center bg-primary/10 rounded-full">
+          <svg class="w-8 h-8 text-primary dark:text-light" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M17 20h5v-2a3 3 0 0 0-5.356-1.857M7 20v-2a3 3 0 0 1 5.356-1.857M15 7a3 3 0 1 1-6 0"/>
+          </svg>
         </div>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">Built-in Messaging</h3>
+        <p class="text-gray-600 dark:text-gray-300">Coordinate pickup times securely without sharing personal info.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition dark:bg-gray-700 dark:hover:shadow-lg">
+        <div class="w-16 h-16 mb-6 flex items-center justify-center bg-primary/10 rounded-full">
+          <svg class="w-8 h-8 text-primary dark:text-light" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M3 5h18M9 3v2m6-2v2M3 10h18M5 15h14M7 20h10"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">Personal Dashboard</h3>
+        <p class="text-gray-600 dark:text-gray-300">Track your listings, requests, messages & GreenPoints in one view.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- How It Works -->
-  <section class="py-16 bg-gray-100 text-center dark:bg-gray-700">
-    <div class="container mx-auto">
-      <h2 class="text-3xl font-bold text-[#4b6cb7] mb-10 dark:text-blue-300">How It Works</h2>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div class="bg-white p-6 rounded shadow border-t-4 border-[#6a8bd8] transform transition hover:-translate-y-1 duration-300 dark:bg-gray-800 dark:border-blue-400">
-          <div class="w-12 h-12 mx-auto mb-4 bg-[#6a8bd8] text-white rounded-full flex items-center justify-center text-xl font-bold animate-bounce-slow dark:bg-blue-500">1</div>
-          <h4 class="text-[#4b6cb7] text-lg font-bold mb-2 dark:text-blue-300">Sign Up</h4>
-          <p class="dark:text-gray-300">Create your account and set your location.</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow border-t-4 border-[#6a8bd8] transform transition hover:-translate-y-1 duration-300 dark:bg-gray-800 dark:border-blue-400">
-          <div class="w-12 h-12 mx-auto mb-4 bg-[#6a8bd8] text-white rounded-full flex items-center justify-center text-xl font-bold animate-bounce-slow dark:bg-blue-500" style="animation-delay: 0.2s">2</div>
-          <h4 class="text-[#4b6cb7] text-lg font-bold mb-2 dark:text-blue-300">List or Request</h4>
-          <p class="dark:text-gray-300">Add items to share or request what you need.</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow border-t-4 border-[#6a8bd8] transform transition hover:-translate-y-1 duration-300 dark:bg-gray-800 dark:border-blue-400">
-          <div class="w-12 h-12 mx-auto mb-4 bg-[#6a8bd8] text-white rounded-full flex items-center justify-center text-xl font-bold animate-bounce-slow dark:bg-blue-500" style="animation-delay: 0.4s">3</div>
-          <h4 class="text-[#4b6cb7] text-lg font-bold mb-2 dark:text-blue-300">Meet & Exchange</h4>
-          <p class="dark:text-gray-300">Connect with users and make the swap offline.</p>
-        </div>
-        <div class="bg-white p-6 rounded shadow border-t-4 border-[#6a8bd8] transform transition hover:-translate-y-1 duration-300 dark:bg-gray-800 dark:border-blue-400">
-          <div class="w-12 h-12 mx-auto mb-4 bg-[#6a8bd8] text-white rounded-full flex items-center justify-center text-xl font-bold animate-bounce-slow dark:bg-blue-500" style="animation-delay: 0.6s">4</div>
-          <h4 class="text-[#4b6cb7] text-lg font-bold mb-2 dark:text-blue-300">Earn Points</h4>
-          <p class="dark:text-gray-300">Confirm the swap and earn GreenPoints!</p>
-        </div>
+<!-- ╭─────────────── Workflow ───────────────╮ -->
+<section id="workflow" class="py-24 hero-bg">
+  <div class="container mx-auto px-6">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-4xl font-serif font-bold mb-6">
+        How <span class="gradient-text">EcoSwap</span> Works
+      </h2>
+      <p class="text-lg text-gray-600 dark:text-gray-300">Join the circular economy in four simple steps.</p>
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-10">
+      <!-- Steps -->
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-6 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold">1</div>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">Sign Up / Log In</h3>
+        <p class="text-gray-600 dark:text-gray-300">Create your profile with location & interests.</p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-6 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold">2</div>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">Add or Request Items</h3>
+        <p class="text-gray-600 dark:text-gray-300">Post what you have or need with photos & condition.</p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-6 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold">3</div>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">Message & Meet</h3>
+        <p class="text-gray-600 dark:text-gray-300">Chat securely & pick a convenient meetup spot.</p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-16 h-16 mx-auto mb-6 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold">4</div>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">Swap & Earn</h3>
+        <p class="text-gray-600 dark:text-gray-300">Confirm, rate the experience & collect GreenPoints.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Call to Action -->
+<!-- ╭─────────────── GreenPoints CTA ───────────────╮ -->
+<section id="rewards" class="py-24 bg-primary text-white relative overflow-hidden">
+  <div class="absolute inset-0 opacity-25" style="background:radial-gradient(circle at center,rgba(255,255,255,.15),transparent 70%);"></div>
+
+  <div class="container mx-auto px-6 relative z-10">
+    <div class="flex flex-col lg:flex-row items-center">
+      <div class="lg:w-2/3">
+        <h2 class="text-3xl md:text-4xl font-serif font-bold mb-4">
+          Earn GreenPoints for every eco-friendly act
+        </h2>
+        <p class="text-lg mb-8">
+          +10 points when someone contacts you &mdash; plus a bonus +20 when the exchange is completed.
+          Redeem points for eco-brand vouchers or donate them to planet-friendly charities.
+        </p>
+      </div>
+      <div class="lg:w-1/3 flex justify-center lg:justify-end">
+        <a href="signup.html" class="inline-block px-10 py-4 bg-white text-primary rounded-full font-semibold shadow hover:shadow-lg transition">
+          Signup&nbsp;Now&nbsp;&rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╭─────────────── Footer ───────────────╮ -->
+<footer class="bg-dark text-white py-12">
+  <div class="container mx-auto px-6">
+    <div class="flex flex-col md:flex-row md:justify-between gap-8">
+      <div>
+        <h3 class="text-2xl font-bold gradient-text mb-3">EcoSwap</h3>
+        <p class="text-sm text-gray-300">Building a world where sharing beats buying.</p>
+      </div>
+
+      <div class="space-y-2">
+        <a href="#workflow" class="block hover:text-light">How&nbsp;It&nbsp;Works</a>
+        <a href="#rewards"  class="block hover:text-light">GreenPoints</a>
+      </div>
+
+      <div class="space-y-2">
+        <a href="#" class="block hover:text-light">Contact Us</a>
+      </div>
+    </div>
+
+    <p class="mt-10 text-center text-xs text-gray-400">
+      &copy; <span id="year"></span> EcoSwap. All rights reserved.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Set current year
+  document.getElementById('year').textContent = new Date().getFullYear();
   
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{
+      const t=document.querySelector(a.getAttribute('href'));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+    });
+  });
+  
+  // Dark mode toggle
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+  const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-  <!-- Footer -->
-  <footer class="bg-[#182848] text-white text-center py-4 dark:bg-gray-900">
-    <p class="mb-0">© 2025 EcoSwap — Swap Sustainably <span class="animate-pulse-slow">🌿</span></p>
-  </footer>
+  // Change the icons inside the button based on previous settings
+  if (localStorage.getItem('color-theme') {
+    if (localStorage.getItem('color-theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+      themeToggleLightIcon.classList.remove('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      themeToggleDarkIcon.classList.remove('hidden');
+    }
+  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.classList.add('dark');
+    themeToggleLightIcon.classList.remove('hidden');
+  } else {
+    document.documentElement.classList.remove('dark');
+    themeToggleDarkIcon.classList.remove('hidden');
+  }
 
-  <!-- JS Logic -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-      const authLinks = document.getElementById('authLinks');
-      const logoutDivider = document.getElementById('logoutDivider');
-      const logoutLink = document.getElementById('logoutLink');
-      const menuButton = document.getElementById('menuButton');
-      const dropdownMenu = document.getElementById('dropdownMenu');
-      const themeToggle = document.getElementById('themeToggle');
-      const themeIconSun = document.getElementById('themeIconSun');
-      const themeIconMoon = document.getElementById('themeIconMoon');
-
-      // Menu toggle
-      menuButton.addEventListener('click', () => {
-        dropdownMenu.classList.toggle('hidden');
-      });
-
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!menuButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
-          dropdownMenu.classList.add('hidden');
-        }
-      });
-
-      // Auth state
-      if (isLoggedIn) {
-        authLinks.classList.add('hidden');
-        logoutDivider.classList.remove('hidden');
-        logoutLink.classList.remove('hidden');
-      }
-
-      // Logout
-      document.getElementById('logoutButton')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        sessionStorage.removeItem('isLoggedIn');
-        window.location.href = 'login.html';
-      });
-
-      // Theme toggle
-      themeToggle.addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-        const isDark = document.documentElement.classList.contains('dark');
-        localStorage.setItem('darkMode', isDark);
-        themeIconSun.classList.toggle('hidden', isDark);
-        themeIconMoon.classList.toggle('hidden', !isDark);
-      });
-
-      // Check for saved theme preference
-      if (localStorage.getItem('darkMode') === 'true' || 
-          (!localStorage.getItem('darkMode') && 
-           window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  themeToggleBtn.addEventListener('click', function() {
+    // toggle icons
+    themeToggleDarkIcon.classList.toggle('hidden');
+    themeToggleLightIcon.classList.toggle('hidden');
+    
+    // if set via local storage previously
+    if (localStorage.getItem('color-theme')) {
+      if (localStorage.getItem('color-theme') === 'light') {
         document.documentElement.classList.add('dark');
-        themeIconSun.classList.add('hidden');
-        themeIconMoon.classList.remove('hidden');
+        localStorage.setItem('color-theme', 'dark');
       } else {
         document.documentElement.classList.remove('dark');
-        themeIconSun.classList.remove('hidden');
-        themeIconMoon.classList.add('hidden');
+        localStorage.setItem('color-theme', 'light');
       }
-    });
-  </script>
+    } else {
+      // if NOT set via local storage previously
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('color-theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+      }
+    }
+  });
+  
+  // Simulate authentication state (for demo purposes)
+  // In a real app, this would be handled by your authentication system
+  const isLoggedIn = false; // Change to true to see logged-in state
+  
+  const authButtons = document.getElementById('auth-buttons');
+  const userDropdown = document.getElementById('user-dropdown');
+  
+  if (isLoggedIn) {
+    authButtons.classList.add('hidden');
+    userDropdown.classList.remove('hidden');
+  } else {
+    authButtons.classList.remove('hidden');
+    userDropdown.classList.add('hidden');
+  }
+</script>
 </body>
 </html>
