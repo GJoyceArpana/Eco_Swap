@@ -167,45 +167,13 @@ body {
   overflow: hidden;
 }
 
-.chart-card {
-  flex: 1 1 45%;
-}
-
 h3 {
   margin: 0 0 15px;
   font-weight: 700;
   color: #182848;
 }
 
-.item-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 15px 0;
-  overflow-y: auto;
-  flex-grow: 1;
-  font-size: 14px;
-  color: #555;
-}
 
-.item-list li {
-  padding: 6px 0;
-  border-bottom: 1px solid #dbe3f0;
-}
-
-.top-products {
-  list-style: none;
-  padding-left: 15px;
-  font-weight: 600;
-  color: #4b6cb7;
-  max-height: 150px;
-  overflow-y: auto;
-}
-
-.top-products li {
-  padding: 5px 0;
-  border-bottom: 1px solid #e1e7fc;
-  cursor: default;
-}
 
 .legend {
   display: flex;
@@ -235,35 +203,8 @@ h3 {
   background-color: #d9e7fb;
 }
 
-.chat-box {
-  max-height: 350px;
-  display: flex;
-  flex-direction: column;
-}
 
-.chat-messages {
-  flex-grow: 1;
-  background: #e7ebf8;
-  border-radius: 12px;
-  padding: 15px;
-  overflow-y: auto;
-  font-size: 14px;
-  color: #222;
-  margin-bottom: 10px;
-}
 
-.chat-input {
-  border-radius: 20px;
-  padding: 10px 15px;
-  border: 1.5px solid #4b6cb7;
-  font-size: 16px;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.chat-input:focus {
-  border-color: #182848;
-}
 
 /* Scrollbar Styling */
 .tab-buttons::-webkit-scrollbar,
@@ -293,6 +234,7 @@ h3 {
   .container {
     flex-direction: column;
   }
+
   .sidebar {
     width: 100%;
     height: auto;
@@ -300,35 +242,28 @@ h3 {
     padding: 10px 20px;
     overflow-x: auto;
   }
+
   .tab-buttons {
     flex-direction: row;
     gap: 15px;
     overflow-x: auto;
   }
+
   .tab-btn {
     padding: 10px 12px;
     font-size: 13px;
     white-space: nowrap;
   }
+
   .main {
     padding: 15px 20px;
   }
+
   .row {
     flex-direction: column;
   }
+
   .card {
     flex-basis: 100%;
   }
 }
-#activityChart {
-  width: 300px !important;
-  height: 300px !important;
-}
-.doughnut-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px; /* Or adjust as needed */
-  max-width: 100%;
-}
-
