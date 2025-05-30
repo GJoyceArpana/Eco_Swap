@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -121,12 +120,17 @@
       
       <!-- User dropdown (will be shown when logged in) -->
       <div id="user-dropdown" class="hidden items-center space-x-2">
-        <button class="flex items-center space-x-2 focus:outline-none">
-          <span class="font-medium">User</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
+        <div class="relative">
+          <button class="flex items-center space-x-2 focus:outline-none">
+            <span class="font-medium">User</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden dropdown-menu dark:bg-gray-700">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 logout-btn">Logout</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -159,7 +163,7 @@
     <!-- Image -->
     <div class="lg:w-1/2 relative">
       <div class="relative z-10 max-w-lg mx-auto">
-        <img src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=800&q=80"
+        <img src="./bg.png"
              alt="People swapping items" class="rounded-2xl shadow-2xl" loading="lazy">
       </div>
       <div class="absolute -top-12 -right-12 w-32 h-32 bg-primary/10 rounded-full"></div>
@@ -206,7 +210,7 @@
             <path d="M17 20h5v-2a3 3 0 0 0-5.356-1.857M7 20v-2a3 3 0 0 1 5.356-1.857M15 7a3 3 0 1 1-6 0"/>
           </svg>
         </div>
-        <h3 class="text-xl font-bold mb-3 dark:text-white">Built-in Messaging</h3>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">Connect</h3>
         <p class="text-gray-600 dark:text-gray-300">Coordinate pickup times securely without sharing personal info.</p>
       </div>
 
@@ -249,8 +253,8 @@
 
       <div class="text-center">
         <div class="w-16 h-16 mx-auto mb-6 bg-primary text-white rounded-full flex items-center justify-center text-xl font-bold">3</div>
-        <h3 class="text-xl font-bold mb-3 dark:text-white">Message & Meet</h3>
-        <p class="text-gray-600 dark:text-gray-300">Chat securely & pick a convenient meetup spot.</p>
+        <h3 class="text-xl font-bold mb-3 dark:text-white">Meet</h3>
+        <p class="text-gray-600 dark:text-gray-300">Pick a convenient meetup spot.</p>
       </div>
 
       <div class="text-center">
@@ -316,10 +320,13 @@
   document.getElementById('year').textContent = new Date().getFullYear();
   
   // Smooth scrolling for anchor links
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click',e=>{
-      const t=document.querySelector(a.getAttribute('href'));
-      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) {
+        e.preventDefault();
+        t.scrollIntoView({ behavior: 'smooth' });
+      }
     });
   });
   
@@ -328,16 +335,9 @@
   const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
   const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
-  // Change the icons inside the button based on previous settings
-  if (localStorage.getItem('color-theme') {
-    if (localStorage.getItem('color-theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-      themeToggleLightIcon.classList.remove('hidden');
-    } else {
-      document.documentElement.classList.remove('dark');
-      themeToggleDarkIcon.classList.remove('hidden');
-    }
-  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  // Check for saved theme preference or use system preference
+  if (localStorage.getItem('color-theme') === 'dark' || 
+      (!localStorage.getItem('color-theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark');
     themeToggleLightIcon.classList.remove('hidden');
   } else {
@@ -346,45 +346,77 @@
   }
 
   themeToggleBtn.addEventListener('click', function() {
-    // toggle icons
+    // Toggle icons
     themeToggleDarkIcon.classList.toggle('hidden');
     themeToggleLightIcon.classList.toggle('hidden');
     
-    // if set via local storage previously
-    if (localStorage.getItem('color-theme')) {
-      if (localStorage.getItem('color-theme') === 'light') {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('color-theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('color-theme', 'light');
-      }
+    // Toggle theme and save preference
+    if (document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('color-theme', 'light');
     } else {
-      // if NOT set via local storage previously
-      if (document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('color-theme', 'light');
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('color-theme', 'dark');
-      }
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('color-theme', 'dark');
     }
   });
   
-  // Simulate authentication state (for demo purposes)
-  // In a real app, this would be handled by your authentication system
-  const isLoggedIn = false; // Change to true to see logged-in state
-  
-  const authButtons = document.getElementById('auth-buttons');
-  const userDropdown = document.getElementById('user-dropdown');
-  
-  if (isLoggedIn) {
-    authButtons.classList.add('hidden');
-    userDropdown.classList.remove('hidden');
-  } else {
-    authButtons.classList.remove('hidden');
-    userDropdown.classList.add('hidden');
+  // Authentication state management
+  function checkAuthState() {
+    // Check if user is logged in (in a real app, this would check your auth system)
+    const isLoggedIn = localStorage.getItem('ecoswap-auth') === 'true';
+    
+    const authButtons = document.getElementById('auth-buttons');
+    const userDropdown = document.getElementById('user-dropdown');
+    
+    if (isLoggedIn) {
+      authButtons.classList.add('hidden');
+      userDropdown.classList.remove('hidden');
+    } else {
+      authButtons.classList.remove('hidden');
+      userDropdown.classList.add('hidden');
+    }
   }
+  
+  // User dropdown toggle
+  document.querySelector('#user-dropdown button')?.addEventListener('click', function() {
+    document.querySelector('.dropdown-menu').classList.toggle('hidden');
+  });
+  
+  // Handle login button (redirect to login.html without preventing default)
+  document.querySelector('a[href="login.html"]')?.addEventListener('click', function(e) {
+    // Allow default behavior (navigation to login.html)
+    // No need to prevent default or set auth state here
+    // The login page will handle authentication
+  });
+  
+  // Handle signup button (redirect to signup.html without preventing default)
+  document.querySelector('a[href="signup.html"]')?.addEventListener('click', function(e) {
+    // Allow default behavior (navigation to signup.html)
+    // The signup page will handle authentication
+  });
+  
+  // Handle logout (demo only)
+  document.querySelector('.logout-btn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.removeItem('ecoswap-auth');
+    checkAuthState();
+    // Redirect to home page after logout
+    window.location.href = 'index.html';
+  });
+  
+  // Initialize auth state when page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    checkAuthState();
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.querySelector('.dropdown-menu');
+      const dropdownBtn = document.querySelector('#user-dropdown button');
+      if (dropdown && dropdownBtn && !dropdown.contains(event.target) && !dropdownBtn.contains(event.target)) {
+        dropdown.classList.add('hidden');
+      }
+    });
+  });
 </script>
 </body>
 </html>
