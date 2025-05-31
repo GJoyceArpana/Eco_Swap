@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
@@ -135,7 +136,6 @@
       background-color: #1f2937;
     }
 
-    /* Search bar container in sidebar */
     #sidebar-search {
       padding: 0 1rem 1rem 1rem;
     }
@@ -155,111 +155,55 @@
       color: #d1d5db;
     }
 
-    /* Theme toggle button transparent bg */
     #theme-toggle {
       background-color: transparent !important;
     }
-    /* Show sun icon only in dark mode and make it white */
     body.dark #icon-sun {
       display: block !important;
       color: white;
     }
-    /* Show moon icon only in light mode and make it black */
     body:not(.dark) #icon-moon {
       display: block !important;
       color: black;
     }
   </style>
-
-  <link rel="stylesheet" href="dashboard.css" />
-
 </head>
 <body class="font-sans text-gray-800 antialiased min-h-screen flex flex-col bg-blue-50 dark:bg-[#1e3a8a]">
-  <!-- (navbar) -->
-  <nav
-    class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur shadow-sm dark:bg-gray-800/90 flex items-center justify-between px-6 py-4"
-  >
-    <a href="#" class="flex items-center space-x-3">
+  <!-- Navbar -->
+  <nav class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur shadow-sm dark:bg-gray-800/90 flex items-center justify-between px-6 py-4">
+    <a href="index.html" class="flex items-center space-x-3">
       <img src="./logo.png" alt="EcoSwap logo" class="h-12 w-auto" />
       <span class="text-2xl font-bold gradient-text">EcoSwap</span>
     </a>
 
-    <h1
-      class="text-2xl font-serif font-bold text-gray-800 dark:text-gray-200"
-    >
-      Dashboard
-    </h1>
+    <h1 class="text-2xl font-serif font-bold text-gray-800 dark:text-gray-200">Dashboard</h1>
 
-    <!-- Dark/Light toggle -->
-    <button
-      id="theme-toggle"
-      aria-label="Toggle dark/light mode"
-      class="px-4 py-2 rounded-md text-white hover:bg-accent transition flex items-center"
-      type="button"
-    >
-      <svg
-        id="icon-sun"
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5 hidden"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M18.364 18.364l-1.414-1.414M6.05 6.05L4.636 4.636M12 8a4 4 0 100 8 4 4 0 000-8z"
-        />
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" aria-label="Toggle dark/light mode" class="px-4 py-2 rounded-md text-white hover:bg-accent transition flex items-center" type="button">
+      <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M18.364 18.364l-1.414-1.414M6.05 6.05L4.636 4.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
       </svg>
-      <svg
-        id="icon-moon"
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5 hidden"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-      >
+      <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="currentColor" viewBox="0 0 24 24">
         <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
       </svg>
     </button>
   </nav>
+
+  <!-- Main Content -->
   <main class="flex flex-1 pt-20">
     <aside id="sidebar" class="fixed top-20 bottom-0 left-0 flex flex-col overflow-y-auto">
-      <aside
-      id="sidebar"
-      class="fixed top-20 bottom-0 left-0 flex flex-col overflow-y-auto"
-    >
-      <!-- Search Bar -->
       <div id="sidebar-search">
-        <input
-          type="text"
-          placeholder="Search..."
-          aria-label="Search"
-          class="dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
-        />
+        <input type="text" placeholder="Search..." aria-label="Search" class="dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600" />
       </div>
 
       <nav class="flex flex-col mt-2 space-y-1 px-4 flex-grow">
-        <a
-          href="newitem.html"
-          class="hover:bg-primary rounded-md px-4 py-3 transition text-white font-medium"
-          >Add-Item</a
-        >
-        <a
-          href="sample.html"
-          class="hover:bg-primary rounded-md px-4 py-3 cursor-default"
-          >Request-Item</a
-        >
+        <a href="newitem.html" class="hover:bg-primary rounded-md px-4 py-3 transition text-white font-medium">Add-Item</a>
+        <a href="sample.html" class="hover:bg-primary rounded-md px-4 py-3 cursor-default">Request-Item</a>
       </nav>
+
       <nav class="px-4 py-3">
-        <a
-          href="index.html"
-          id="signout-tab"
-          class="block rounded-md px-4 py-3 text-white transition"
-          >Sign Out</a
-        >
+        <a href="index.html" id="signout-tab" class="block rounded-md px-4 py-3 text-white transition">Sign Out</a>
       </nav>
-    </aside>
     </aside>
 
     <section id="profile-section" class="ml-[220px] flex-1 bg-white dark:bg-gray-800 p-2 overflow-auto">
@@ -269,60 +213,25 @@
             <img src="./default-user.png" alt="Profile Image" id="profile-image" title="Click to upload" />
             <input type="file" id="profile-image-input" accept="image/*" class="hidden" />
           </div>
+
           <div>
-            <label
-              for="name"
-              class="block text-gray-700 dark:text-gray-300 font-semibold mb-2"
-              >Name</label
-            >
-            <input
-              id="name"
-              type="text"
-              class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200"
-              placeholder="Your full name"
-              required
-            />
+            <label for="name" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Name</label>
+            <input id="name" type="text" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="Your full name" required />
           </div>
 
           <div>
-            <label
-              for="email"
-              class="block text-gray-700 dark:text-gray-300 font-semibold mb-2"
-              >Email</label
-            >
-            <input
-              id="email"
-              type="email"
-              class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200"
-              placeholder="example@gmail.com"
-              required
-            />
+            <label for="email" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Email</label>
+            <input id="email" type="email" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="example@gmail.com" required />
           </div>
 
           <div>
-            <label
-              for="phone"
-              class="block text-gray-700 dark:text-gray-300 font-semibold mb-2"
-              >Phone</label
-            >
-            <input
-              id="phone"
-              type="tel"
-              class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200"
-              placeholder="7975745570"
-            />
+            <label for="phone" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Phone</label>
+            <input id="phone" type="tel" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="7975745570" />
           </div>
 
           <div>
-            <label
-              for="gender"
-              class="block text-gray-700 dark:text-gray-300 font-semibold mb-2"
-              >Gender</label
-            >
-            <select
-              id="gender"
-              class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200"
-            >
+            <label for="gender" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Gender</label>
+            <select id="gender" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200">
               <option value="">Select gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -331,30 +240,13 @@
           </div>
 
           <div>
-            <label
-              for="birthday"
-              class="block text-gray-700 dark:text-gray-300 font-semibold mb-2"
-              >Birthday</label
-            >
-            <input
-              id="birthday"
-              type="date"
-              class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200"
-            />
+            <label for="birthday" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Birthday</label>
+            <input id="birthday" type="date" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" />
           </div>
 
           <div>
-            <label
-              for="about"
-              class="block text-gray-700 dark:text-gray-300 font-semibold mb-2"
-              >About Me</label
-            >
-            <textarea
-              id="about"
-              rows="5"
-              class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200"
-              placeholder="Tell us something about yourself..."
-            ></textarea>
+            <label for="about" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">About Me</label>
+            <textarea id="about" rows="5" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="Tell us something about yourself..."></textarea>
           </div>
 
           <div class="flex justify-end space-x-2">
@@ -382,7 +274,6 @@
       editBtn.classList.toggle('hidden', enable);
     }
 
-    // Initial state - disabled inputs
     toggleEdit(false);
 
     editBtn.addEventListener('click', () => toggleEdit(true));
@@ -406,7 +297,6 @@
       }
     });
 
-    // Theme toggle logic
     const themeToggle = document.getElementById('theme-toggle');
     const sunIcon = document.getElementById('icon-sun');
     const moonIcon = document.getElementById('icon-moon');
