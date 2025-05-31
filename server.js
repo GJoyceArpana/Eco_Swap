@@ -12,12 +12,11 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-const db = admin.firestore(); // Firestore database reference
+const db = admin.firestore();
 
 const app = express();
 const PORT = 3000;
 
-// Middlewares
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -77,7 +76,7 @@ app.post("/submit-item", upload.array("images", 4), async (req, res) => {
   }
 });
 
-// Handle requested item submission
+// Handle requested item submission under user subcollection
 app.post("/submit-request", async (req, res) => {
   try {
     const {
@@ -87,10 +86,11 @@ app.post("/submit-request", async (req, res) => {
       condition,
       location,
       email,
-      phone
+      phone,
+      userId
     } = req.body;
 
-    if (!itemName || !email || !phone) {
+    if (!itemName || !email || !phone || !userId) {
       return res.status(400).json({ success: false, message: "Missing required fields." });
     }
 
@@ -105,12 +105,78 @@ app.post("/submit-request", async (req, res) => {
       timestamp: admin.firestore.FieldValue.serverTimestamp()
     };
 
-    await db.collection("requested_items").add(requestData);
+    // Store under users/{userId}/request_items
+    await db.collection("users")
+      .doc(userId)
+      .collection("request_items")
+      .add(requestData);
 
     res.status(200).json({ success: true, message: "Requested item submitted successfully!" });
   } catch (error) {
     console.error("Error submitting requested item:", error);
     res.status(500).json({ success: false, message: "Internal server error." });
+  }
+});
+
+
+// ✅ NEW APIs
+
+// Fetch all available items
+app.get("/api/items", async (req, res) => {
+  try {
+    const snapshot = await db.collection("items").get();
+    const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    res.status(200).json(items);
+  } catch (error) {
+    console.error("Error fetching items:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+// Submit a new request for an unavailable item
+app.post("/api/request-item", async (req, res) => {
+  try {
+    const { itemName, userId } = req.body;
+
+    await db.collection("requests").add({
+      itemName,
+      userId,
+      status: "pending",
+      timestamp: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    res.status(200).json({ message: "Item requested successfully." });
+  } catch (error) {
+    console.error("Request item error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
+// Accept a provider and auto-reject others for a given item
+app.post("/api/accept-provider", async (req, res) => {
+  try {
+    const { itemName, providerName } = req.body;
+
+    const snapshot = await db.collection("requests")
+      .where("itemName", "==", itemName)
+      .get();
+
+    const batch = db.batch();
+
+    snapshot.docs.forEach(doc => {
+      const ref = db.collection("requests").doc(doc.id);
+      const data = doc.data();
+      if (data.status === "pending") {
+        const newStatus = data.userId === providerName ? "accepted" : "rejected";
+        batch.update(ref, { status: newStatus });
+      }
+    });
+
+    await batch.commit();
+    res.status(200).json({ message: "Request accepted and others rejected." });
+  } catch (error) {
+    console.error("Accept provider error:", error);
+    res.status(500).json({ error: "Internal server error." });
   }
 });
 
