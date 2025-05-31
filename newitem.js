@@ -29,6 +29,7 @@ const reviewSection = document.getElementById("reviewSection");
 const reviewEmail = document.getElementById("reviewEmail");
 const reviewPhone = document.getElementById("reviewPhone");
 const reviewName = document.getElementById("reviewName");
+const finalSubmitBtn = document.getElementById("finalSubmitBtn"); // Make sure you have this button in your HTML
 
 // Listen for user login state
 onAuthStateChanged(auth, user => {
@@ -161,6 +162,7 @@ form.addEventListener("submit", event => {
   }
 });
 
+// Handle final submit (Step 2: Confirm & save to Firestore)
 finalSubmitBtn.addEventListener("click", async () => {
   if (!currentUser) {
     alert("Please log in to submit an item.");
@@ -191,7 +193,15 @@ finalSubmitBtn.addEventListener("click", async () => {
     // Store in user-specific subcollection
     const userDocRef = doc(db, "users", currentUser.uid);
     const postItemsCollectionRef = collection(userDocRef, "postItems");
-    await addDoc(postItemsCollectionRef, itemData);
+    
+    // Add item doc to postItems collection and get its ref
+    const newItemDocRef = await addDoc(postItemsCollectionRef, itemData);
+
+    // Create requestedBy subcollection reference (no docs added yet)
+    const requestedByCollectionRef = collection(newItemDocRef, "requestedBy");
+    
+    // Optional: add a placeholder empty document to create subcollection immediately
+    // await addDoc(requestedByCollectionRef, {});
 
     // Store in global /items collection with postedBy field
     const itemsCollectionRef = collection(db, "items");
