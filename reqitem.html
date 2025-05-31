@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
@@ -69,7 +70,7 @@
       <button type="submit" class="submit-btn">Next</button>
     </form>
   </section>
-    
+
   <!-- Review Section (Initially hidden) -->
   <section id="reqReviewSection" style="display:none; margin-top: 30px;">
     <h3>Review Your Request</h3>
@@ -79,6 +80,37 @@
     <button type="button" class="submit-btn" onclick="finalReqSubmit()">Confirm & Submit</button>
   </section>
 
+  <!-- Firebase JS SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const firebaseConfig = {
+       apiKey: "AIzaSyAWQIJirF6ap5HOE55yNL_zTiZWTzS-luo",
+    authDomain: "ecoswap-4db13.firebaseapp.com",
+    projectId: "ecoswap-4db13",
+    storageBucket: "ecoswap-4db13.firebasestorage.app",
+    messagingSenderId: "184392888367",
+    appId: "1:184392888367:web:6986d2bd7bd8c97c9f16da",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Check if user is logged in
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User is logged in:", user.uid);
+        localStorage.setItem("userId", user.uid);
+      } else {
+        console.warn("No user signed in. Redirecting...");
+        alert("Please log in to access the request form.");
+        window.location.href = "login.html"; // Redirect to your login page
+      }
+    });
+  </script>
+
+  <!-- Your JS Logic -->
   <script src="reqitem.js"></script>
 </body>
 </html>
