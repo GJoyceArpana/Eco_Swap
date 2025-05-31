@@ -1,122 +1,91 @@
 function submitRequestForm(event) {
   event.preventDefault();
-  let isValid = true;
-  document.querySelectorAll(".error").forEach(e => e.textContent = "");
 
-  const fields = [
-    { id: "reqCategory", name: "Category" },
-    { id: "reqItemName", name: "Item Name" },
-    { id: "reqDescription", name: "Description" },
-    { id: "reqLocation", name: "Location" },
-    { id: "reqEmail", name: "Email" },
-    { id: "reqPhone", name: "Phone" }
-  ];
+  // Clear previous errors
+  document.querySelectorAll(".error").forEach(e => e.innerText = "");
 
-  fields.forEach(field => {
-    const input = document.getElementById(field.id);
-    const error = document.getElementById(`error-${field.id}`);
-    if (!input.value.trim()) {
-      error.textContent = `Please enter ${field.name.toLowerCase()}.`;
-      isValid = false;
-    }
-  });
-
+  // Grab form values
+  const category = document.getElementById("reqCategory").value.trim();
+  const itemName = document.getElementById("reqItemName").value.trim();
+  const description = document.getElementById("reqDescription").value.trim();
+  const condition = document.getElementById("reqCondition").value.trim();
+  const location = document.getElementById("reqLocation").value.trim();
   const email = document.getElementById("reqEmail").value.trim();
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (email && !emailPattern.test(email)) {
-    document.getElementById("error-reqEmail").textContent = "Enter a valid email address.";
-    isValid = false;
-  }
-
   const phone = document.getElementById("reqPhone").value.trim();
-  const phonePattern = /^\d{10}$/;
-  if (phone && !phonePattern.test(phone)) {
-    document.getElementById("error-reqPhone").textContent = "Enter a valid 10-digit phone number.";
-    isValid = false;
+
+  let hasError = false;
+
+  if (!category) {
+    document.getElementById("error-reqCategory").innerText = "Category is required.";
+    hasError = true;
+  }
+  if (!itemName) {
+    document.getElementById("error-reqItemName").innerText = "Item name is required.";
+    hasError = true;
+  }
+  if (!description) {
+    document.getElementById("error-reqDescription").innerText = "Description is required.";
+    hasError = true;
+  }
+  if (!location) {
+    document.getElementById("error-reqLocation").innerText = "Location is required.";
+    hasError = true;
+  }
+  if (!email) {
+    document.getElementById("error-reqEmail").innerText = "Email is required.";
+    hasError = true;
+  }
+  if (!phone || phone.length !== 10) {
+    document.getElementById("error-reqPhone").innerText = "Enter a valid 10-digit phone number.";
+    hasError = true;
   }
 
-  if (isValid) {
-    document.getElementById("reviewReqEmail").textContent = email;
-    document.getElementById("reviewReqPhone").textContent = phone;
-    document.getElementById("reviewReqName").textContent = document.getElementById("reqItemName").value;
-    document.getElementById("reqReviewSection").style.display = "block";
-    document.getElementById("reqReviewSection").scrollIntoView({ behavior: "smooth" });
-  }
-}
-function finalReqSubmit() {
-  const category = document.getElementById("reqCategory").value;
-  const itemName = document.getElementById("reqItemName").value;
-  const description = document.getElementById("reqDescription").value;
-  const condition = document.getElementById("reqCondition").value;
-  const location = document.getElementById("reqLocation").value;
-  const email = document.getElementById("reqEmail").value;
-  const phone = document.getElementById("reqPhone").value;
+  if (hasError) return;
 
-  // Validate inputs
-  if (!category || !itemName || !description || !condition || !location || !email || !phone) {
-    alert("Please fill out all fields before submitting.");
-    return;
-  }
+  // Temporarily store in localStorage to show in review
+  localStorage.setItem("requestDetails", JSON.stringify({
+    category, itemName, description, condition, location, email, phone
+  }));
 
-  const requestData = {
-    category,
-    itemName,
-    description,
-    condition,
-    location,
-    email,
-    phone,
-    timestamp: new Date().toISOString(),
-  };
+  // Populate review section
+  document.getElementById("reviewReqEmail").innerText = email;
+  document.getElementById("reviewReqPhone").innerText = phone;
+  document.getElementById("reviewReqName").innerText = itemName;
 
-  fetch("http://localhost:3000/submit-request", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestData),
-  })
-    .then(async (res) => {
-      if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(errorText || "Request failed");
-      }
-      return res.json();
-    })
-    .then((data) => {
-      console.log("Success:", data);
-      alert("Request submitted successfully!");
-      document.getElementById("reqItemForm").reset();
-      document.getElementById("reqReviewSection").style.display = "none";
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("Failed to submit request. Please try again later.");
-    });
-}
-
-// Optional: Add review functionality
-function previewRequest() {
-  const category = document.getElementById("reqCategory").value;
-  const itemName = document.getElementById("reqItemName").value;
-  const description = document.getElementById("reqDescription").value;
-  const condition = document.getElementById("reqCondition").value;
-  const location = document.getElementById("reqLocation").value;
-  const email = document.getElementById("reqEmail").value;
-  const phone = document.getElementById("reqPhone").value;
-
-  if (!category || !itemName || !description || !condition || !location || !email || !phone) {
-    alert("Please fill out all fields before previewing.");
-    return;
-  }
-
-  document.getElementById("reviewCategory").textContent = category;
-  document.getElementById("reviewItemName").textContent = itemName;
-  document.getElementById("reviewDescription").textContent = description;
-  document.getElementById("reviewCondition").textContent = condition;
-  document.getElementById("reviewLocation").textContent = location;
-  document.getElementById("reviewEmail").textContent = email;
-  document.getElementById("reviewPhone").textContent = phone;
-
+  // Show review section and hide form
+  document.getElementById("reqItemForm").style.display = "none";
   document.getElementById("reqReviewSection").style.display = "block";
+}
+
+async function finalReqSubmit() {
+  const data = JSON.parse(localStorage.getItem("requestDetails"));
+  const userId = localStorage.getItem("userId");
+
+  if (!userId) {
+    alert("User not logged in.");
+    return;
+  }
+
+  const payload = { ...data, userId };
+
+  try {
+    const res = await fetch("/submit-request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await res.json();
+
+    if (result.success) {
+      alert("Request submitted successfully!");
+      localStorage.removeItem("requestDetails");
+      window.location.href = "/"; // Redirect to home or success page
+    } else {
+      alert("Error: " + result.message);
+    }
+  } catch (error) {
+    console.error("Submit error:", error);
+    alert("Failed to submit your request. Please try again later.");
+  }
 }
