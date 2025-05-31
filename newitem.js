@@ -161,7 +161,6 @@ form.addEventListener("submit", event => {
   }
 });
 
-
 finalSubmitBtn.addEventListener("click", async () => {
   if (!currentUser) {
     alert("Please log in to submit an item.");
@@ -172,10 +171,8 @@ finalSubmitBtn.addEventListener("click", async () => {
   finalSubmitBtn.textContent = "Submitting...";
 
   try {
-    // Instead of uploading, just count the number of uploaded images
     const imageCount = uploadedImages.length;
 
-    // Prepare item data with image count (no URLs)
     const itemData = {
       category: document.getElementById("category").value.trim(),
       itemName: document.getElementById("itemName").value.trim(),
@@ -186,14 +183,19 @@ finalSubmitBtn.addEventListener("click", async () => {
       email: document.getElementById("email").value.trim(),
       phone: document.getElementById("phone").value.trim(),
       userId: currentUser.uid,
-      imageCount: imageCount,   // just store count here
+      postedBy: currentUser.uid,  // For global collection
+      imageCount: imageCount,
       createdAt: new Date()
     };
 
+    // Store in user-specific subcollection
     const userDocRef = doc(db, "users", currentUser.uid);
     const postItemsCollectionRef = collection(userDocRef, "postItems");
-
     await addDoc(postItemsCollectionRef, itemData);
+
+    // Store in global /items collection with postedBy field
+    const itemsCollectionRef = collection(db, "items");
+    await addDoc(itemsCollectionRef, itemData);
 
     alert("Item submitted successfully!");
     window.location.href = "dashboard.html";
