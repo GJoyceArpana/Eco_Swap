@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,7 +147,7 @@
       if (!available) {
         results.innerHTML = `
           <p style="color:#4b6cb7;">Not available</p>
-          <button onclick="addRequest('${itemName}')">Request Item</button>
+          <button onclick="window.location.href='reqitem.html?item=${encodeURIComponent(itemName)}'">Request Item</button>
         `;
       } else {
         results.innerHTML = `
@@ -160,12 +161,6 @@
           </div>
         `;
       }
-    }
-
-    function addRequest(name) {
-      requestedItems.push({ name, status: "pending" });
-      alert("Request submitted.");
-      showRequestSection();
     }
 
     function acceptRequest(name, provider) {
@@ -189,14 +184,13 @@
     }
 
     function showChat(item, provider) {
-  const main = document.getElementById("mainContent");
-  main.innerHTML = `
-    <h3>${item}</h3>
-    <p>Provider: ${provider}</p>
-    <a href="chat.html" class="btn" style="background-color: #4b6cb7; color: white; padding: 10px 16px; border-radius: 5px; text-decoration: none;">Chat</a>
-  `;
-}
-
+      const main = document.getElementById("mainContent");
+      main.innerHTML = `
+        <h3>${item}</h3>
+        <p>Provider: ${provider}</p>
+        <a href="chat.html" class="btn" style="background-color: #4b6cb7; color: white; padding: 10px 16px; border-radius: 5px; text-decoration: none;">Chat</a>
+      `;
+    }
   </script>
 </body>
 </html>

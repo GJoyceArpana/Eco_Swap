@@ -1,24 +1,69 @@
-let uploadedImages = [];
+// Modular Firebase imports
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+import { getFirestore, collection, doc, addDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
-function handleImageUpload(event) {
+const firebaseConfig = {
+  apiKey: "AIzaSyAWQIJirF6ap5HOE55yNL_zTiZWTzS-luo",
+  authDomain: "ecoswap-4db13.firebaseapp.com",
+  projectId: "ecoswap-4db13",
+  storageBucket: "ecoswap-4db13.appspot.com",
+  messagingSenderId: "184392888367",
+  appId: "1:184392888367:web:6986d2bd7bd8c97c9f16da",
+  measurementId: "G-X94Q876C3D"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let uploadedImages = [];
+let currentUser = null;
+
+const form = document.getElementById("itemForm");
+const chooseImagesBtn = document.getElementById("chooseImagesBtn");
+const itemPhotosInput = document.getElementById("itemPhotos");
+const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+const reviewSection = document.getElementById("reviewSection");
+const reviewEmail = document.getElementById("reviewEmail");
+const reviewPhone = document.getElementById("reviewPhone");
+const reviewName = document.getElementById("reviewName");
+
+// Listen for user login state
+onAuthStateChanged(auth, user => {
+  if (user) {
+    currentUser = user;
+    console.log("User signed in:", user.email);
+  } else {
+    currentUser = null;
+    console.log("No user signed in");
+  }
+});
+
+// Open file dialog on button click
+chooseImagesBtn.addEventListener("click", () => {
+  itemPhotosInput.click();
+});
+
+// Handle image uploads and previews
+itemPhotosInput.addEventListener("change", event => {
   const files = Array.from(event.target.files);
   const errorField = document.getElementById("error-itemPhotos");
-  const previewContainer = document.getElementById("imagePreviewContainer");
 
   if ((uploadedImages.length + files.length) > 4) {
     errorField.textContent = "You can only upload up to 4 images.";
     return;
   }
-
   errorField.textContent = "";
 
   files.forEach(file => {
     if (!file.type.startsWith("image/")) return;
 
     const reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = e => {
       const imageId = Date.now() + Math.random();
-      uploadedImages.push({ id: imageId, file: file });
+      uploadedImages.push({ id: imageId, file });
 
       const preview = document.createElement("div");
       preview.className = "image-preview";
@@ -34,13 +79,13 @@ function handleImageUpload(event) {
 
       preview.appendChild(img);
       preview.appendChild(removeBtn);
-      previewContainer.appendChild(preview);
+      imagePreviewContainer.appendChild(preview);
     };
     reader.readAsDataURL(file);
   });
 
-  event.target.value = '';
-}
+  event.target.value = "";
+});
 
 function removeImage(imageId) {
   uploadedImages = uploadedImages.filter(img => img.id !== imageId);
@@ -48,12 +93,10 @@ function removeImage(imageId) {
   if (imageDiv) imageDiv.remove();
 }
 
-function submitForm(event) {
-  event.preventDefault();
+// Validate form inputs
+function validateForm() {
   let isValid = true;
-
-  // Clear previous errors
-  document.querySelectorAll(".error").forEach(e => e.textContent = "");
+  document.querySelectorAll(".error").forEach(e => (e.textContent = ""));
 
   const fields = [
     { id: "category", name: "Category" },
@@ -66,7 +109,6 @@ function submitForm(event) {
     { id: "itemAction", name: "Action" }
   ];
 
-  // Basic non-empty check
   fields.forEach(field => {
     const input = document.getElementById(field.id);
     const error = document.getElementById(`error-${field.id}`);
@@ -76,7 +118,6 @@ function submitForm(event) {
     }
   });
 
-  // Email pattern check
   const email = document.getElementById("email").value.trim();
   const emailError = document.getElementById("error-email");
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -85,7 +126,6 @@ function submitForm(event) {
     isValid = false;
   }
 
-  // Phone number pattern check
   const phone = document.getElementById("phone").value.trim();
   const phoneError = document.getElementById("error-phone");
   const phonePattern = /^\d{10}$/;
@@ -94,65 +134,79 @@ function submitForm(event) {
     isValid = false;
   }
 
-  // Image validation
   const imgError = document.getElementById("error-itemPhotos");
   if (uploadedImages.length === 0) {
     imgError.textContent = "Please upload at least one image.";
     isValid = false;
   }
 
-  if (isValid) {
-    // Populate review section
-    document.getElementById("reviewEmail").textContent = email;
-    document.getElementById("reviewPhone").textContent = phone;
-    document.getElementById("reviewName").textContent = document.getElementById("itemName").value;
-
-    // Show review section
-    document.getElementById("reviewSection").style.display = "block";
-    document.getElementById("reviewSection").scrollIntoView({ behavior: "smooth" });
-  }
+  return isValid;
 }
 
-async function finalSubmit() {
-  const form = document.getElementById("itemForm");
-  const formData = new FormData();
+// Show review info
+function showReview() {
+  reviewEmail.textContent = document.getElementById("email").value.trim();
+  reviewPhone.textContent = document.getElementById("phone").value.trim();
+  reviewName.textContent = document.getElementById("itemName").value.trim();
 
-  // Append text fields
-  formData.append("itemName", document.getElementById("itemName").value);
-  formData.append("itemDescription", document.getElementById("description").value);
-  formData.append("itemCategory", document.getElementById("category").value);
-  formData.append("itemCondition", document.getElementById("itemCondition").value);
-  formData.append("itemAction", document.getElementById("itemAction").value);
-  formData.append("location", document.getElementById("location").value);
-  formData.append("email", document.getElementById("email").value);
-  formData.append("phone", document.getElementById("phone").value);
-  formData.append("userId", "user123"); // Replace with actual userId logic
+  reviewSection.style.display = "block";
+  reviewSection.scrollIntoView({ behavior: "smooth" });
+}
 
-  // Append image files
-  uploadedImages.forEach((img, index) => {
-    formData.append("images", img.file);
-  });
+// Handle form submission (Step 1: Validate & show review)
+form.addEventListener("submit", event => {
+  event.preventDefault();
+  if (validateForm()) {
+    showReview();
+  }
+});
+
+
+finalSubmitBtn.addEventListener("click", async () => {
+  if (!currentUser) {
+    alert("Please log in to submit an item.");
+    return;
+  }
+
+  finalSubmitBtn.disabled = true;
+  finalSubmitBtn.textContent = "Submitting...";
 
   try {
-  const response = await fetch('http://localhost:3000/submit-item', {
+    // Instead of uploading, just count the number of uploaded images
+    const imageCount = uploadedImages.length;
 
-      method: 'POST',
-      body: formData
-    });
+    // Prepare item data with image count (no URLs)
+    const itemData = {
+      category: document.getElementById("category").value.trim(),
+      itemName: document.getElementById("itemName").value.trim(),
+      description: document.getElementById("description").value.trim(),
+      itemCondition: document.getElementById("itemCondition").value.trim(),
+      itemAction: document.getElementById("itemAction").value.trim(),
+      location: document.getElementById("location").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      userId: currentUser.uid,
+      imageCount: imageCount,   // just store count here
+      createdAt: new Date()
+    };
 
-    const result = await response.json();
+    const userDocRef = doc(db, "users", currentUser.uid);
+    const postItemsCollectionRef = collection(userDocRef, "postItems");
 
-    if (result.success) {
-      alert("Item submitted successfully!");
-      form.reset();
-      uploadedImages = [];
-      document.getElementById("imagePreviewContainer").innerHTML = "";
-      document.getElementById("reviewSection").style.display = "none";
-    } else {
-      alert("Submission failed: " + result.message);
-    }
+    await addDoc(postItemsCollectionRef, itemData);
+
+    alert("Item submitted successfully!");
+    window.location.href = "dashboard.html";
+    form.reset();
+    uploadedImages = [];
+    imagePreviewContainer.innerHTML = "";
+    reviewSection.style.display = "none";
+
   } catch (error) {
-    console.error("Error submitting form:", error);
-    alert("Something went wrong while submitting.");
+    console.error("Error submitting item:", error);
+    alert("Failed to submit item. Try again later.");
   }
-}
+
+  finalSubmitBtn.disabled = false;
+  finalSubmitBtn.textContent = "Confirm & Submit";
+});
