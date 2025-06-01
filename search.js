@@ -3,6 +3,8 @@ import {
   getFirestore,
   collection,
   getDocs,
+  getDoc,
+  doc,
   addDoc
 } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 import {
@@ -36,6 +38,9 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+/**
+ * Search items by name and show only those that are not accepted yet
+ */
 export async function searchItem() {
   const itemNameInput = document.getElementById("searchItem");
   const searchTerm = itemNameInput.value.trim().toLowerCase();
@@ -51,30 +56,55 @@ export async function searchItem() {
   try {
     const itemsCol = collection(db, "items");
     const snapshot = await getDocs(itemsCol);
-    const items = [];
+    const filteredItems = [];
 
-    snapshot.forEach(doc => {
-      const data = doc.data();
+    for (const docSnap of snapshot.docs) {
+      const data = docSnap.data();
+
+      // Check if itemName matches searchTerm
       if (data.itemName && data.itemName.toLowerCase().includes(searchTerm)) {
-        items.push({ id: doc.id, ...data });
-      }
-    });
+        const providerUserId = data.userId;
 
-    if (items.length === 0) {
+        if (!providerUserId) {
+          // If no provider userId, include item by default
+          filteredItems.push({ id: docSnap.id, ...data });
+          continue;
+        }
+
+        // Check accepted field in user's postItems/{itemId}
+        const postItemDocRef = doc(db, "users", providerUserId, "postItems", docSnap.id);
+        const postItemSnap = await getDoc(postItemDocRef);
+
+        if (postItemSnap.exists()) {
+          const postItemData = postItemSnap.data();
+
+          // Include only if accepted !== true
+          if (!postItemData.accepted) {
+            filteredItems.push({ id: docSnap.id, ...data });
+          }
+        } else {
+          // If postItem doc does not exist, assume not accepted, include
+          filteredItems.push({ id: docSnap.id, ...data });
+        }
+      }
+    }
+
+    if (filteredItems.length === 0) {
       resultsDiv.innerHTML = `
-        <p style="color:#4b6cb7;">No items found matching "${searchTerm}"</p>
+        <p style="color:#4b6cb7;">No items found matching "${searchTerm}" or all matching items have been accepted.</p>
         <button onclick="window.location.href='reqitem.html?item=${encodeURIComponent(searchTerm)}'">Request Item</button>
       `;
     } else {
-      resultsDiv.innerHTML = items.map(item => `
-        <div class="provider-box">
+      resultsDiv.innerHTML = filteredItems.map(item => `
+        <div class="provider-box border p-4 mb-4 rounded shadow">
           <p><strong>Item:</strong> ${item.itemName}</p>
-          <p><strong>Provider:</strong> ${item.postedBy || 'Unknown'}</p>
+          <p><strong>Provider:</strong> ${item.userId || 'Unknown'}</p>
           <p><strong>Location:</strong> ${item.location || 'Not specified'}</p>
-          <button onclick="requestItem('${item.id}', '${item.itemName}', '${item.postedBy || 'Unknown'}')">Request</button>
+          <button onclick="requestItem('${item.id}', '${item.itemName}', '${item.userId || 'Unknown'}')" class="bg-blue-500 text-white px-3 py-1 rounded mt-2 hover:bg-blue-600">Request</button>
         </div>
       `).join('');
     }
+
   } catch (error) {
     resultsDiv.innerHTML = `<p style="color:red;">Error searching items: ${error.message}</p>`;
   }
@@ -84,7 +114,7 @@ export async function searchItem() {
  * Request the item by adding current user info to requestedBy subcollection
  * @param {string} itemId - Firestore doc id of the item
  * @param {string} itemName - item name (optional for alerts)
- * @param {string} provider - provider name (optional for alerts)
+ * @param {string} provider - provider userId (optional for alerts)
  */
 export async function requestItem(itemId, itemName, provider) {
   if (!currentUser) {
@@ -111,5 +141,6 @@ export async function requestItem(itemId, itemName, provider) {
   }
 }
 
-// Expose the requestItem function so it can be called in onclick in HTML
+// Expose the requestItem function globally to call from HTML buttons
 window.requestItem = requestItem;
+//search.js
