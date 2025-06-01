@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="scroll-smooth">
+<html class="scroll-smooth" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -46,7 +46,7 @@
       },
     };
   </script>
-
+  <script type="module" src="newitem.js"></script>
   <style>
     .gradient-text {
       background: linear-gradient(90deg, #4b6cb7 0%, #3b5998 100%);
@@ -240,7 +240,7 @@
           >Post-New</a
         >
         <a
-          href="posted1.html"
+          href="posted.html"
           class="hover:bg-primary rounded-md px-4 py-3 cursor-default"
           >Posted-Items</a
         >
@@ -385,7 +385,8 @@
   </div>
 
   <button
-    type="submit"
+    type="submit" 
+    id="finalSubmitBtn"
     class="w-full py-3 bg-primary rounded-md font-semibold text-white hover:bg-secondary transition"
   >
     Submit Item
@@ -431,103 +432,6 @@
     });
   
     loadTheme();
-  
-    // Image upload preview & validation
-    const itemPhotosInput = document.getElementById("itemPhotos");
-    const imagePreviewContainer = document.getElementById("imagePreviewContainer");
-    const chooseImagesBtn = document.getElementById("chooseImagesBtn");
-  
-    chooseImagesBtn.addEventListener("click", () => {
-      itemPhotosInput.click();
-    });
-  
-    itemPhotosInput.addEventListener("change", () => {
-      imagePreviewContainer.innerHTML = "";
-      const files = itemPhotosInput.files;
-  
-      if (files.length > 4) {
-        document.getElementById("error-itemPhotos").textContent = "You can upload a maximum of 4 images.";
-        itemPhotosInput.value = "";
-        return;
-      } else {
-        document.getElementById("error-itemPhotos").textContent = "";
-      }
-  
-      Array.from(files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          imagePreviewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-  
-    // Form validation
-    const form = document.getElementById("itemForm");
-  
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      let isValid = true;
-  
-      // Helper
-      function showError(id, message) {
-        document.getElementById("error-" + id).textContent = message;
-        isValid = false;
-      }
-  
-      function clearError(id) {
-        document.getElementById("error-" + id).textContent = "";
-      }
-  
-      // Fields
-      const category = document.getElementById("category").value.trim();
-      const itemName = document.getElementById("itemName").value.trim();
-      const description = document.getElementById("description").value.trim();
-      const condition = document.getElementById("itemCondition").value.trim();
-      const action = document.getElementById("itemAction").value.trim();
-      const location = document.getElementById("location").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const files = itemPhotosInput.files;
-  
-      // Validate
-      isValid = true;
-      if (!category) showError("category", "Please select a category.");
-      else clearError("category");
-  
-      if (!itemName) showError("itemName", "Item name is required.");
-      else clearError("itemName");
-  
-      if (!description) showError("description", "Description is required.");
-      else clearError("description");
-  
-      if (!condition) showError("itemCondition", "Condition is required.");
-      else clearError("itemCondition");
-  
-      if (!action) showError("itemAction", "Please choose an action.");
-      else clearError("itemAction");
-  
-      if (!location) showError("location", "Location is required.");
-      else clearError("location");
-  
-      if (!email || !/\S+@\S+\.\S+/.test(email)) showError("email", "Valid email is required.");
-      else clearError("email");
-  
-      if (!phone || !/^\d{10}$/.test(phone)) showError("phone", "Valid 10-digit phone is required.");
-      else clearError("phone");
-  
-      if (files.length === 0) showError("itemPhotos", "Please upload at least 1 image.");
-      else if (files.length > 4) showError("itemPhotos", "Maximum 4 images allowed.");
-      else clearError("itemPhotos");
-  
-      if (isValid) {
-        alert("Form submitted successfully!");
-        // You can now send the data to your server or reset the form
-        // form.reset();
-      }
-    });
   </script>
   
 </body>
