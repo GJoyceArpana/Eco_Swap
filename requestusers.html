@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Requested Users</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import {
+      getFirestore,
+      doc,
+      getDocs,
+      updateDoc,
+      collection
+    } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWQIJirF6ap5HOE55yNL_zTiZWTzS-luo",
+      authDomain: "ecoswap-4db13.firebaseapp.com",
+      projectId: "ecoswap-4db13",
+      storageBucket: "ecoswap-4db13.appspot.com",
+      messagingSenderId: "184392888367",
+      appId: "1:184392888367:web:6986d2bd7bd8c97c9f16da",
+      measurementId: "G-X94Q876C3D"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth();
+
+    const itemId = new URLSearchParams(window.location.search).get("itemId");
+    const listContainer = document.getElementById("userList");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        listContainer.innerHTML = "<p class='text-center text-gray-600'>Please log in to view requests.</p>";
+        return;
+      }
+
+      const userId = user.uid;
+      const requestedRef = collection(db, `items/${itemId}/requestedBy`);
+      const snapshot = await getDocs(requestedRef);
+
+      if (snapshot.empty) {
+        listContainer.innerHTML = "<p class='text-gray-500'>No requests yet.</p>";
+        return;
+      }
+
+      // Gather requests in an array for filtering
+      const requests = [];
+      snapshot.forEach(docSnap => {
+        requests.push({
+          id: docSnap.id,
+          ...docSnap.data()
+        });
+      });
+
+      // Check if any request is accepted
+      const acceptedRequest = requests.find(r => r.status === "accept");
+
+      // If accepted request exists, show only that requester
+      if (acceptedRequest) {
+        listContainer.innerHTML = ""; // Clear container
+
+        const card = createRequestCard(acceptedRequest, true);
+        listContainer.appendChild(card);
+
+      } else {
+        // No accepted request, show only pending requests (exclude rejected)
+        listContainer.innerHTML = "";
+
+        const pendingRequests = requests.filter(r => r.status !== "reject");
+
+        if (pendingRequests.length === 0) {
+          listContainer.innerHTML = "<p class='text-gray-500'>No pending requests.</p>";
+          return;
+        }
+
+        pendingRequests.forEach(req => {
+          const card = createRequestCard(req, false);
+          listContainer.appendChild(card);
+        });
+      }
+
+      function createRequestCard(reqData, isAccepted) {
+        const card = document.createElement("div");
+        card.className = "border p-4 rounded shadow mb-4 bg-white";
+
+        card.innerHTML = `
+          <p class="flex items-center space-x-2">
+            <strong>Name:</strong> 
+            <span>${reqData.name || "Unknown"}</span>
+            ${isAccepted ? `<span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>` : ""}
+          </p>
+          <p><strong>User ID:</strong> ${reqData.userId}</p>
+          <p><strong>Location:</strong> ${reqData.location || "Not Provided"}</p>
+          <div class="mt-2 space-x-2">
+            ${isAccepted ? "" : `
+              <button class="acceptBtn bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">Accept</button>
+              <button class="rejectBtn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Reject</button>
+            `}
+          </div>
+        `;
+
+        if (!isAccepted) {
+          card.querySelector(".acceptBtn").addEventListener("click", async () => {
+            try {
+              // Update accepted status in request
+              await updateDoc(doc(db, `items/${itemId}/requestedBy/${reqData.id}`), {
+                status: "accept",
+                acceptedBy: userId
+              });
+
+              // Update accepted info in item document
+              await updateDoc(doc(db, `users/${userId}/postItems/${itemId}`), {
+                accepted: true,
+                acceptedTo: reqData.userId
+              });
+
+              alert("Accepted!");
+
+              // Refresh page to reflect changes
+              window.location.reload();
+            } catch (error) {
+              alert("Error accepting request: " + error.message);
+            }
+          });
+
+          card.querySelector(".rejectBtn").addEventListener("click", async () => {
+            try {
+              await updateDoc(doc(db, `items/${itemId}/requestedBy/${reqData.id}`), {
+                status: "reject"
+              });
+              alert("Rejected!");
+
+              // Remove rejected card from UI immediately
+              card.remove();
+
+              // If no more pending cards, show message
+              if (listContainer.children.length === 0) {
+                listContainer.innerHTML = "<p class='text-gray-500'>No pending requests.</p>";
+              }
+            } catch (error) {
+              alert("Error rejecting request: " + error.message);
+            }
+          });
+        }
+
+        return card;
+      }
+    });
+  </script>
+</head>
+<body class="bg-gray-50 min-h-screen p-6">
+  <h1 class="text-2xl font-bold mb-4 text-blue-800">Requested Users</h1>
+  <div id="userList"></div>
+</body>
+</html>
