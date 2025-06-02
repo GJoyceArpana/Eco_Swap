@@ -92,7 +92,14 @@ export async function searchItem() {
     if (filteredItems.length === 0) {
       resultsDiv.innerHTML = `
         <p style="color:#4b6cb7;">No items found matching "${searchTerm}" or all matching items have been accepted.</p>
-        <button onclick="window.location.href='reqitem.html?item=${encodeURIComponent(searchTerm)}'">Request Item</button>
+        <button 
+  onclick="window.location.href='reqitem.html?item=${encodeURIComponent(searchTerm)}'" 
+  class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+>
+  Request Item
+</button>
+
+        
       `;
     } else {
       resultsDiv.innerHTML = filteredItems.map(item => `
