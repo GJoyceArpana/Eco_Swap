@@ -398,10 +398,6 @@
     const toggleBtn = document.getElementById("theme-toggle");
     const sunIcon = document.getElementById("icon-sun");
     const moonIcon = document.getElementById("icon-moon");
-
-    /**
-     * Updates the visibility of the sun and moon icons based on the current theme.
-     */
     function updateThemeIcons() {
       if (document.body.classList.contains("dark")) {
         sunIcon.style.display = "block";
@@ -412,10 +408,6 @@
       }
     }
 
-    /**
-     * Loads the saved theme from localStorage or defaults to system preference.
-     * Applies the theme to the body and updates the icons.
-     */
     function loadTheme() {
       const savedTheme = localStorage.getItem("theme");
       if (
@@ -438,12 +430,6 @@
 
     // Load theme when the script runs
     loadTheme();
-
-    // --- User Authentication Listener ---
-    /**
-     * Listens for changes in the Firebase authentication state.
-     * Updates `currentUser` and redirects if no user is logged in.
-     */
     onAuthStateChanged(auth, user => {
       if (user) {
         currentUser = user;
@@ -456,12 +442,6 @@
       }
     });
 
-    // --- Form Validation Logic ---
-    /**
-     * Validates all required fields in the request form, including email and phone formats.
-     * Displays error messages next to invalid fields.
-     * @returns {boolean} True if the form is valid, false otherwise.
-     */
     function validateForm() {
       let isValid = true;
       // Clear all existing error messages
@@ -510,11 +490,6 @@
     const reqItemForm = document.getElementById("reqItemForm");
     const requestSubmitBtn = document.getElementById("requestSubmitBtn");
 
-    /**
-     * Handles the submission of the item request form.
-     * Validates inputs, stores data in Firestore, and redirects on success.
-     * @param {Event} event - The form submission event.
-     */
     reqItemForm.addEventListener("submit", async function (event) {
       event.preventDefault(); // Prevent default form submission
 
@@ -557,10 +532,10 @@
         await setDoc(newGlobalRequestDocRef, { requestitemId: newGlobalRequestDocRef.id }, { merge: true });
 
 
-        // 2. Store a copy of the request in the user's specific subcollection
+        
         const userRef = doc(db, "users", currentUser.uid);
         const userRequestedItemsCollection = collection(userRef, "requestedItems");
-        // Ensure the subcollection document also has the global item ID for linking
+        
         const userSpecificRequestData = {
             ...requestData,
             requestitemId: newGlobalRequestDocRef.id // Link to the global item
