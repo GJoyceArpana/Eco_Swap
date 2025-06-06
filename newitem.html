@@ -183,6 +183,26 @@
     .upload-btn:hover {
       background-color: #3b5998;
     }
+
+    /* Green Points Styling */
+    #greenPointsDisplay {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px; /* Adjust size as needed */
+        height: 50px; /* Adjust size as needed */
+        border-radius: 50%;
+        background-color: #22c55e; /* Green background */
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-left: 1rem; /* Space from other navbar items */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        flex-shrink: 0; /* Prevent shrinking */
+    }
+    body.dark #greenPointsDisplay {
+        background-color: #15803d; /* Darker green for dark mode */
+    }
   </style>
 </head>
 <body
@@ -202,37 +222,41 @@
       Dashboard
     </h1>
 
-    <button
-      id="theme-toggle"
-      aria-label="Toggle dark/light mode"
-      class="px-4 py-2 rounded-md text-white hover:bg-accent transition flex items-center"
-      type="button"
-    >
-      <svg
-        id="icon-sun"
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5 hidden"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M18.364 18.364l-1.414-1.414M6.05 6.05L4.636 4.636M12 8a4 4 0 100 8 4 4 0 000-8z"
-        />
-      </svg>
-      <svg
-        id="icon-moon"
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-5 w-5 hidden"
-        fill="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
-      </svg>
-    </button>
+    <div class="flex items-center space-x-4">
+        <div id="greenPointsDisplay" aria-label="Green Points">0</div>
+
+        <button
+            id="theme-toggle"
+            aria-label="Toggle dark/light mode"
+            class="px-4 py-2 rounded-md text-white hover:bg-accent transition flex items-center"
+            type="button"
+        >
+            <svg
+                id="icon-sun"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 hidden"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M18.364 18.364l-1.414-1.414M6.05 6.05L4.636 4.636M12 8a4 4 0 100 8 4 4 0 000-8z"
+                />
+            </svg>
+            <svg
+                id="icon-moon"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 hidden"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
+            </svg>
+        </button>
+    </div>
   </nav>
 
   <main class="flex pt-20 pl-[220px] min-h-screen bg-white dark:bg-[#1f2937]">
@@ -415,7 +439,7 @@
     // Theme toggle logic
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-    import { getFirestore, collection, doc, addDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+    import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, increment, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAWQIJirF6ap5HOE55yNL_zTiZWTzS-luo",
@@ -435,6 +459,7 @@
     const toggleBtn = document.getElementById("theme-toggle");
     const sunIcon = document.getElementById("icon-sun");
     const moonIcon = document.getElementById("icon-moon");
+    const greenPointsDisplay = document.getElementById("greenPointsDisplay"); // New: Green points display element
 
     function updateThemeIcons() {
       if (document.body.classList.contains("dark")) {
@@ -476,11 +501,33 @@
     const imagePreviewContainer = document.getElementById("imagePreviewContainer");
     const finalSubmitBtn = document.getElementById("finalSubmitBtn");
 
+    // Function to fetch and display green points
+    async function fetchAndDisplayGreenPoints(userId) {
+        if (!userId) {
+            greenPointsDisplay.textContent = "N/A";
+            return;
+        }
+        try {
+            const userDocRef = doc(db, "users", userId);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
+                const userData = userDocSnap.data();
+                greenPointsDisplay.textContent = userData.greenPoints !== undefined ? userData.greenPoints : 0;
+            } else {
+                greenPointsDisplay.textContent = 0; // Default to 0 if user doc doesn't exist yet
+            }
+        } catch (error) {
+            console.error("Error fetching green points:", error);
+            greenPointsDisplay.textContent = "Error";
+        }
+    }
+
     // Listen for user login state
     onAuthStateChanged(auth, user => {
       if (user) {
         currentUser = user;
         console.log("User signed in:", user.email);
+        fetchAndDisplayGreenPoints(user.uid); // Fetch points on login
       } else {
         currentUser = null;
         console.log("No user signed in");
@@ -652,7 +699,13 @@
         const globalItemRef = doc(db, "items", newItemDocRef.id);
         await setDoc(globalItemRef, globalItemData);
 
-        alert("Item submitted successfully!");
+        // --- NEW: Add 10 green points to the user's profile ---
+        await updateDoc(userDocRef, {
+            greenPoints: increment(10)
+        });
+        fetchAndDisplayGreenPoints(currentUser.uid); // Update frontend display
+
+        alert("Item submitted successfully and 10 green points added!");
         form.reset(); // Clear the form
         uploadedImages = []; // Clear uploaded images array
         imagePreviewContainer.innerHTML = ""; // Clear image previews
