@@ -563,12 +563,11 @@
         // Ensure the subcollection document also has the global item ID for linking
         const userSpecificRequestData = {
             ...requestData,
-            global_request_id: newGlobalRequestDocRef.id // Link to the global item
+            requestitemId: newGlobalRequestDocRef.id // Link to the global item
         };
-        const newUserRequestDocRef = await addDoc(userRequestedItemsCollection, userSpecificRequestData);
-
-        // Update the user-specific document with its own ID (this is the {requestId})
-        await setDoc(newUserRequestDocRef, { requestId: newUserRequestDocRef.id }, { merge: true });
+        // Use setDoc with the global ID as the document ID for the user's subcollection
+        // This ensures both requestitemId and requestId refer to the same generated ID.
+        await setDoc(doc(userRequestedItemsCollection, newGlobalRequestDocRef.id), userSpecificRequestData);
 
 
         alert("Item request submitted successfully!");
