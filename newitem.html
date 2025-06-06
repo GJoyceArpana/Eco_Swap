@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EcoSwap Dashboard - Add New Item</title>
 
-  <!-- Fonts & Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -88,7 +87,7 @@
     }
 
     body.dark {
-      background-color:#1f2937 ;
+      background-color: #1f2937;
       color: #d1d5db;
     }
     body.dark #sidebar {
@@ -143,12 +142,33 @@
       flex-wrap: wrap;
     }
 
+    .image-preview-container .image-preview {
+      position: relative;
+    }
+
     .image-preview-container img {
       width: 80px;
       height: 80px;
       object-fit: cover;
       border-radius: 0.5rem;
       border: 2px solid #4b6cb7;
+    }
+
+    .image-preview .remove-btn {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #dc2626;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: none;
     }
 
     .upload-btn {
@@ -168,7 +188,6 @@
 <body
   class="font-sans text-gray-800 antialiased min-h-screen flex flex-col bg-blue-50 dark:bg-[#1e3a8a]"
 >
-  <!-- Navbar -->
   <nav
     class="fixed inset-x-0 top-0 z-50 bg-white/90 backdrop-blur shadow-sm dark:bg-gray-800/90 flex items-center justify-between px-6 py-4"
   >
@@ -183,7 +202,6 @@
       Dashboard
     </h1>
 
-    <!-- Theme Toggle -->
     <button
       id="theme-toggle"
       aria-label="Toggle dark/light mode"
@@ -217,9 +235,7 @@
     </button>
   </nav>
 
-  <!-- Main Content -->
   <main class="flex pt-20 pl-[220px] min-h-screen bg-white dark:bg-[#1f2937]">
-    <!-- Sidebar -->
     <aside
       id="sidebar"
       class="fixed top-20 bottom-0 left-0 flex flex-col overflow-y-auto"
@@ -237,7 +253,7 @@
         <a href="dashboard.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Profile</a>
         <a
           href="newitem.html"
-          class="bg-primary rounded-md px-4 py-3 transition text-white font-medium"
+          class="active rounded-md px-4 py-3 transition text-white font-medium"
           >Add New Item</a
         >
         <a
@@ -259,151 +275,167 @@
       </nav>
     </aside>
 
-    <!-- Right Content Section with Add New Item Form -->
-    <!-- Right Content Section with Add New Item Form -->
-<section
-  class="flex-1 bg-transparent dark:bg-[#1f2937] p-8 text-gray-800 dark:text-gray-200 max-w-3xl mx-auto rounded-none shadow-none flex flex-col justify-center min-h-[calc(100vh-5rem)]"
->
-  <h2 class="text-3xl font-semibold mb-8 text-center">Add New Item</h2>
-<form id="itemForm" class="space-y-6">
-  <div>
-    <label for="category" class="block mb-2">Category:</label>
-    <select
-      id="category"
-      class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+    <section
+      class="flex-1 bg-transparent dark:bg-[#1f2937] p-8 text-gray-800 dark:text-gray-200 max-w-3xl mx-auto rounded-none shadow-none flex flex-col justify-center min-h-[calc(100vh-5rem)]"
     >
-      <option value="">Select</option>
-      <option>Electronics</option>
-      <option>Books</option>
-      <option>Clothing</option>
-      <option>Furniture</option>
-    </select>
-    <span class="error" id="error-category"></span>
-  </div>
+      <h2 class="text-3xl font-semibold mb-8 text-center">Add New Item</h2>
+      <form id="itemForm" class="space-y-6">
+        <div>
+          <label for="category" class="block mb-2">Category:</label>
+          <select
+            id="category"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          >
+            <option value="">Select</option>
+            <option>Electronics</option>
+            <option>Books</option>
+            <option>Clothing</option>
+            <option>Furniture</option>
+          </select>
+          <span class="error" id="error-category"></span>
+        </div>
 
-  <div>
-    <label for="itemName" class="block mb-2">Item Name:</label>
-    <input
-      type="text"
-      id="itemName"
-      class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-    />
-    <span class="error" id="error-itemName"></span>
-  </div>
+        <div>
+          <label for="itemName" class="block mb-2">Item Name:</label>
+          <input
+            type="text"
+            id="itemName"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+          <span class="error" id="error-itemName"></span>
+        </div>
 
-  <div>
-    <label for="description" class="block mb-2">Description:</label>
-    <textarea
-      id="description"
-      rows="4"
-      placeholder="Describe the item..."
-      class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-    ></textarea>
-    <span class="error" id="error-description"></span>
-  </div>
+        <div>
+          <label for="description" class="block mb-2">Description:</label>
+          <textarea
+            id="description"
+            rows="4"
+            placeholder="Describe the item..."
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          ></textarea>
+          <span class="error" id="error-description"></span>
+        </div>
 
-  <div>
-    <label for="itemCondition" class="block mb-2">Condition:</label>
-    <input
-      type="text"
-      id="itemCondition"
-      placeholder="e.g., Like new, Used"
-      class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-    />
-    <span class="error" id="error-itemCondition"></span>
-  </div>
+        <div>
+          <label for="itemCondition" class="block mb-2">Condition:</label>
+          <input
+            type="text"
+            id="itemCondition"
+            placeholder="e.g., Like new, Used"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+          <span class="error" id="error-itemCondition"></span>
+        </div>
 
-  <div>
-    <label for="itemAction" class="block mb-2">Action:</label>
-    <select
-      id="itemAction"
-      class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-    >
-      <option value="">Select action</option>
-      <option>Swap</option>
-      <option>Lend</option>
-      <option>Donate</option>
-    </select>
-    <span class="error" id="error-itemAction"></span>
-  </div>
+        <div>
+          <label for="itemAction" class="block mb-2">Action:</label>
+          <select
+            id="itemAction"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          >
+            <option value="">Select action</option>
+            <option>Swap</option>
+            <option>Lend</option>
+            <option>Donate</option>
+          </select>
+          <span class="error" id="error-itemAction"></span>
+        </div>
 
-  <div>
-    <label for="location" class="block mb-2">Location:</label>
-    <input
-      type="text"
-      id="location"
-      class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-    />
-    <span class="error" id="error-location"></span>
-  </div>
+        <div>
+          <label for="location" class="block mb-2">Location:</label>
+          <input
+            type="text"
+            id="location"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+          <span class="error" id="error-location"></span>
+        </div>
 
-  <div>
-    <label for="email" class="block mb-2">Email:</label>
-    <input
-      type="email"
-      id="email"
-      placeholder="example@gmail.com"
-      class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-    />
-    <span class="error" id="error-email"></span>
-  </div>
+        <div>
+          <label for="email" class="block mb-2">Email:</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="example@gmail.com"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+          <span class="error" id="error-email"></span>
+        </div>
 
-  <div>
-    <label for="phone" class="block mb-2">Phone:</label>
-    <input
-      type="tel"
-      id="phone"
-      maxlength="10"
-      placeholder="1234567890"
-      class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
-    />
-    <span class="error" id="error-phone"></span>
-  </div>
+        <div>
+          <label for="phone" class="block mb-2">Phone:</label>
+          <input
+            type="tel"
+            id="phone"
+            maxlength="10"
+            placeholder="1234567890"
+            class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#1f2937] p-3 text-base text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+          />
+          <span class="error" id="error-phone"></span>
+        </div>
 
-  <!-- Image Upload -->
-  <div>
-    <label class="block mb-2">Upload Photos (Max 4):</label>
-    <input
-      type="file"
-      id="itemPhotos"
-      accept="image/*"
-      multiple
-      hidden
-    />
-    <button
-      type="button"
-      class="upload-btn"
-      id="chooseImagesBtn"
-      aria-label="Choose images"
-    >
-      Choose Images
-    </button>
-    <span class="error" id="error-itemPhotos"></span>
+        <div>
+          <label class="block mb-2">Upload Photos (Max 4):</label>
+          <input
+            type="file"
+            id="itemPhotos"
+            accept="image/*"
+            multiple
+            hidden
+          />
+          <button
+            type="button"
+            class="upload-btn"
+            id="chooseImagesBtn"
+            aria-label="Choose images"
+          >
+            Choose Images
+          </button>
+          <span class="error" id="error-itemPhotos"></span>
 
-    <div
-      id="imagePreviewContainer"
-      class="image-preview-container mt-3"
-      aria-live="polite"
-    ></div>
-  </div>
+          <div
+            id="imagePreviewContainer"
+            class="image-preview-container mt-3"
+            aria-live="polite"
+          ></div>
+        </div>
 
-  <button
-    type="submit"
-    class="w-full py-3 bg-primary rounded-md font-semibold text-white hover:bg-secondary transition"
-  >
-    Submit Item
-  </button>
-</form>
-</section>
-
+        <button
+          type="submit"
+          id="finalSubmitBtn"
+          class="w-full py-3 bg-primary rounded-md font-semibold text-white hover:bg-secondary transition"
+        >
+          Submit Item
+        </button>
+      </form>
+    </section>
   </main>
 
-  <script>
+  <script type="module">
     // Theme toggle logic
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+    import { getFirestore, collection, doc, addDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWQIJirF6ap5HOE55yNL_zTiZWTzS-luo",
+      authDomain: "ecoswap-4db13.firebaseapp.com",
+      projectId: "ecoswap-4db13",
+      storageBucket: "ecoswap-4db13.appspot.com",
+      messagingSenderId: "184392888367",
+      appId: "1:184392888367:web:6986d2bd7bd8c97c9f16da",
+      measurementId: "G-X94Q876C3D"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
     const toggleBtn = document.getElementById("theme-toggle");
     const sunIcon = document.getElementById("icon-sun");
     const moonIcon = document.getElementById("icon-moon");
-  
+
     function updateThemeIcons() {
       if (document.body.classList.contains("dark")) {
         sunIcon.style.display = "block";
@@ -413,7 +445,7 @@
         moonIcon.style.display = "block";
       }
     }
-  
+
     function loadTheme() {
       const savedTheme = localStorage.getItem("theme");
       if (
@@ -426,112 +458,213 @@
       }
       updateThemeIcons();
     }
-  
+
     toggleBtn.addEventListener("click", () => {
       document.body.classList.toggle("dark");
       localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
       updateThemeIcons();
     });
-  
+
     loadTheme();
-  
-    // Image upload preview & validation
+
+    let uploadedImages = []; // Stores objects: { id, file }
+    let currentUser = null;
+
+    const form = document.getElementById("itemForm");
+    const chooseImagesBtn = document.getElementById("chooseImagesBtn");
     const itemPhotosInput = document.getElementById("itemPhotos");
     const imagePreviewContainer = document.getElementById("imagePreviewContainer");
-    const chooseImagesBtn = document.getElementById("chooseImagesBtn");
-  
+    const finalSubmitBtn = document.getElementById("finalSubmitBtn");
+
+    // Listen for user login state
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        currentUser = user;
+        console.log("User signed in:", user.email);
+      } else {
+        currentUser = null;
+        console.log("No user signed in");
+        // Optionally redirect to login or show a message
+        alert("You must be logged in to add a new item.");
+        window.location.href = "index.html"; // Redirect to login page
+      }
+    });
+
+    // Open file dialog on button click
     chooseImagesBtn.addEventListener("click", () => {
       itemPhotosInput.click();
     });
-  
-    itemPhotosInput.addEventListener("change", () => {
-      imagePreviewContainer.innerHTML = "";
-      const files = itemPhotosInput.files;
-  
-      if (files.length > 4) {
-        document.getElementById("error-itemPhotos").textContent = "You can upload a maximum of 4 images.";
-        itemPhotosInput.value = "";
+
+    // Handle image uploads and previews
+    itemPhotosInput.addEventListener("change", event => {
+      const files = Array.from(event.target.files);
+      const errorField = document.getElementById("error-itemPhotos");
+
+      // Check if adding new files exceeds the limit
+      if ((uploadedImages.length + files.length) > 4) {
+        errorField.textContent = `You can only upload up to 4 images. You have ${uploadedImages.length} already, and are trying to add ${files.length}.`;
         return;
-      } else {
-        document.getElementById("error-itemPhotos").textContent = "";
       }
-  
-      Array.from(files).forEach(file => {
+      errorField.textContent = ""; // Clear previous error
+
+      files.forEach(file => {
+        if (!file.type.startsWith("image/")) return;
+
         const reader = new FileReader();
         reader.onload = e => {
+          const imageId = Date.now() + Math.random();
+          // Store only a reference to the file or its URL if needed, but not the File object itself if you only want count
+          // For previews, we need the URL, so we'll store a temporary one.
+          uploadedImages.push({ id: imageId, url: e.target.result }); // Store temporary URL for preview
+
+          const preview = document.createElement("div");
+          preview.className = "image-preview";
+          preview.dataset.id = imageId;
+
           const img = document.createElement("img");
           img.src = e.target.result;
-          imagePreviewContainer.appendChild(img);
+          img.alt = "Image preview";
+
+          const removeBtn = document.createElement("button");
+          removeBtn.className = "remove-btn";
+          removeBtn.innerHTML = "&times;"; // HTML entity for multiplication sign
+          removeBtn.setAttribute('aria-label', 'Remove image');
+          removeBtn.onclick = () => removeImage(imageId);
+
+          preview.appendChild(img);
+          preview.appendChild(removeBtn);
+          imagePreviewContainer.appendChild(preview);
         };
         reader.readAsDataURL(file);
       });
+
+      event.target.value = ""; // Clear the input so the same file can be selected again (important for 'change' event)
     });
-  
-    // Form validation
-    const form = document.getElementById("itemForm");
-  
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
+
+    function removeImage(imageId) {
+      uploadedImages = uploadedImages.filter(img => img.id !== imageId);
+      const imageDiv = document.querySelector(`.image-preview[data-id='${imageId}']`);
+      if (imageDiv) imageDiv.remove();
+      document.getElementById("error-itemPhotos").textContent = ""; // Clear image count error if images are removed
+    }
+
+    // Validate form inputs
+    function validateForm() {
       let isValid = true;
-  
-      // Helper
-      function showError(id, message) {
-        document.getElementById("error-" + id).textContent = message;
+      document.querySelectorAll(".error").forEach(e => (e.textContent = "")); // Clear all errors
+
+      const fields = [
+        { id: "category", name: "Category" },
+        { id: "itemName", name: "Item Name" },
+        { id: "description", name: "Description" },
+        { id: "location", name: "Location" },
+        { id: "email", name: "Email" },
+        { id: "phone", name: "Phone" },
+        { id: "itemCondition", name: "Condition" },
+        { id: "itemAction", name: "Action" }
+      ];
+
+      fields.forEach(field => {
+        const input = document.getElementById(field.id);
+        const error = document.getElementById(`error-${field.id}`);
+        if (!input.value.trim()) {
+          error.textContent = `Please enter ${field.name.toLowerCase()}.`;
+          isValid = false;
+        }
+      });
+
+      const email = document.getElementById("email").value.trim();
+      const emailError = document.getElementById("error-email");
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (email && !emailPattern.test(email)) {
+        emailError.textContent = "Enter a valid email address.";
         isValid = false;
       }
-  
-      function clearError(id) {
-        document.getElementById("error-" + id).textContent = "";
-      }
-  
-      // Fields
-      const category = document.getElementById("category").value.trim();
-      const itemName = document.getElementById("itemName").value.trim();
-      const description = document.getElementById("description").value.trim();
-      const condition = document.getElementById("itemCondition").value.trim();
-      const action = document.getElementById("itemAction").value.trim();
-      const location = document.getElementById("location").value.trim();
-      const email = document.getElementById("email").value.trim();
+
       const phone = document.getElementById("phone").value.trim();
-      const files = itemPhotosInput.files;
-  
-      // Validate
-      isValid = true;
-      if (!category) showError("category", "Please select a category.");
-      else clearError("category");
-  
-      if (!itemName) showError("itemName", "Item name is required.");
-      else clearError("itemName");
-  
-      if (!description) showError("description", "Description is required.");
-      else clearError("description");
-  
-      if (!condition) showError("itemCondition", "Condition is required.");
-      else clearError("itemCondition");
-  
-      if (!action) showError("itemAction", "Please choose an action.");
-      else clearError("itemAction");
-  
-      if (!location) showError("location", "Location is required.");
-      else clearError("location");
-  
-      if (!email || !/\S+@\S+\.\S+/.test(email)) showError("email", "Valid email is required.");
-      else clearError("email");
-  
-      if (!phone || !/^\d{10}$/.test(phone)) showError("phone", "Valid 10-digit phone is required.");
-      else clearError("phone");
-  
-      if (files.length === 0) showError("itemPhotos", "Please upload at least 1 image.");
-      else if (files.length > 4) showError("itemPhotos", "Maximum 4 images allowed.");
-      else clearError("itemPhotos");
-  
-      if (isValid) {
-        alert("Form submitted successfully!");
-        // You can now send the data to your server or reset the form
-        // form.reset();
+      const phoneError = document.getElementById("error-phone");
+      const phonePattern = /^\d{10}$/;
+      if (phone && !phonePattern.test(phone)) {
+        phoneError.textContent = "Enter a valid 10-digit phone number.";
+        isValid = false;
+      }
+
+      const imgError = document.getElementById("error-itemPhotos");
+      if (uploadedImages.length === 0) {
+        imgError.textContent = "Please upload at least one image.";
+        isValid = false;
+      }
+
+      return isValid;
+    }
+
+    // Handle form submission
+    form.addEventListener("submit", async event => {
+      event.preventDefault(); // Prevent default form submission
+
+      if (!currentUser) {
+        alert("Please log in to submit an item.");
+        window.location.href = "index.html"; // Redirect to login if not logged in
+        return;
+      }
+
+      if (!validateForm()) {
+        return; // Stop if validation fails
+      }
+
+      finalSubmitBtn.disabled = true;
+      finalSubmitBtn.textContent = "Submitting...";
+
+      try {
+        const imageCount = uploadedImages.length; // Get the count of previewed images
+
+        const itemData = {
+          category: document.getElementById("category").value.trim(),
+          itemName: document.getElementById("itemName").value.trim(),
+          description: document.getElementById("description").value.trim(),
+          itemCondition: document.getElementById("itemCondition").value.trim(),
+          itemAction: document.getElementById("itemAction").value.trim(),
+          location: document.getElementById("location").value.trim(),
+          email: document.getElementById("email").value.trim(),
+          phone: document.getElementById("phone").value.trim(),
+          userId: currentUser.uid,
+          imageCount: imageCount, // Store the count of images
+          createdAt: new Date()
+        };
+
+        // Reference to user's postItems collection
+        const userDocRef = doc(db, "users", currentUser.uid);
+        const postItemsCollectionRef = collection(userDocRef, "postItems");
+
+        // Add the item to user's postItems (auto-generates an ID)
+        const newItemDocRef = await addDoc(postItemsCollectionRef, itemData);
+
+        // Update the newly created doc with the postitemId field (the doc ID)
+        await setDoc(newItemDocRef, { postitemId: newItemDocRef.id }, { merge: true });
+
+        // Now create/copy to global 'items' collection using same docId and include postitemId field
+        const globalItemData = {
+          ...itemData,
+          postitemId: newItemDocRef.id,
+          docId: newItemDocRef.id,
+        };
+
+        const globalItemRef = doc(db, "items", newItemDocRef.id);
+        await setDoc(globalItemRef, globalItemData);
+
+        alert("Item submitted successfully!");
+        form.reset(); // Clear the form
+        uploadedImages = []; // Clear uploaded images array
+        imagePreviewContainer.innerHTML = ""; // Clear image previews
+        window.location.href = "posted.html"; // Redirect to my posted items page
+      } catch (error) {
+        console.error("Error submitting item:", error);
+        alert("Failed to submit item. Please try again later.");
+      } finally {
+        finalSubmitBtn.disabled = false;
+        finalSubmitBtn.textContent = "Submit Item";
       }
     });
   </script>
-  
 </body>
 </html>
