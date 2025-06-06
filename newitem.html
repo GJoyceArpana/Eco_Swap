@@ -699,7 +699,6 @@
         const globalItemRef = doc(db, "items", newItemDocRef.id);
         await setDoc(globalItemRef, globalItemData);
 
-        // --- NEW: Add 10 green points to the user's profile ---
         await updateDoc(userDocRef, {
             greenPoints: increment(10)
         });
