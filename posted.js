@@ -23,7 +23,7 @@ const auth = getAuth(app);
 async function fetchUserItems(userId, searchTerm = "") {
   const userItemsCol = collection(db, `users/${userId}/postItems`);
   const snapshot = await getDocs(userItemsCol);
-  const items = [];
+  let items = [];
 
   snapshot.forEach(doc => {
     const data = doc.data();
@@ -34,6 +34,13 @@ async function fetchUserItems(userId, searchTerm = "") {
     if (matchSearch) {
       items.push({ id: doc.id, ...data });
     }
+  });
+
+  // 🔽 Sort by createdAt DESCENDING
+  items.sort((a, b) => {
+    const dateA = a.createdAt?.toDate?.() || new Date(0);
+    const dateB = b.createdAt?.toDate?.() || new Date(0);
+    return dateB - dateA;
   });
 
   return items;
@@ -51,61 +58,66 @@ function displayItemsGroupedByDate(items) {
     grouped[date].push(item);
   });
 
-  for (const [date, itemList] of Object.entries(grouped)) {
-    const dateSection = document.createElement("div");
-    dateSection.className = "mb-6";
+  const orderedDates = [...new Set(items.map(item => {
+    return item.createdAt?.toDate?.().toLocaleDateString() || "Unknown Date";
+  }))];
 
-    const dateHeader = document.createElement("h2");
-    dateHeader.textContent = date;
-    dateHeader.className = "text-xl font-bold mb-2 text-blue-700";
+  orderedDates.forEach(date => {
+    const dateSection = document.createElement("div");
+    dateSection.className = "mb-8";
+
+    const dateHeader = document.createElement("div");
+    dateHeader.className = "flex items-center mb-4";
+    dateHeader.innerHTML = `
+      <h2 class="text-2xl font-bold text-blue-800">${date}</h2>
+      <div class="flex-grow ml-4 h-0.5 bg-gradient-to-r from-blue-400 via-blue-200 to-transparent"></div>
+    `;
     dateSection.appendChild(dateHeader);
 
-    itemList.forEach(item => {
+    grouped[date].forEach(item => {
       const card = document.createElement("div");
-      card.className = "border border-gray-200 rounded p-4 mb-2 shadow-sm bg-gray-50 cursor-pointer hover:bg-blue-50 transition";
-        card.addEventListener("click", () => {
-            window.location.href = `requestusers.html?itemId=${item.id}`; // 🔥 navigate to requestusers.html
-        });
+      card.className = "transition transform hover:scale-[1.01] border border-gray-200 rounded-xl p-5 mb-4 shadow-md bg-white cursor-pointer hover:shadow-lg";
+      card.addEventListener("click", () => {
+        window.location.href = `requestusers.html?itemId=${item.id}`;
+      });
 
-        // Create card title separately so we can append the green circle dynamically
-        const title = document.createElement("h3");
-        title.className = "text-lg font-semibold inline-flex items-center";
-        title.textContent = item.itemName;
+      const title = document.createElement("h3");
+      title.className = "text-xl font-semibold text-gray-800 flex items-center mb-2";
+      title.textContent = item.itemName || "Unnamed Item";
 
-        if (item.accepted) {
+      if (item.accepted) {
         const circle = document.createElement("span");
         circle.className = "ml-2 w-3 h-3 rounded-full bg-green-500 inline-block";
         title.appendChild(circle);
-        }
+      }
 
-        // Create the rest of the content
-        const desc = document.createElement("p");
-        desc.className = "text-sm text-gray-600";
-        desc.textContent = `Description: ${item.description || "No description"}`;
+      const desc = document.createElement("p");
+      desc.className = "text-sm text-gray-600 mb-2";
+      desc.textContent = `📄 ${item.description || "No description provided."}`;
 
-        const cond = document.createElement("p");
-        cond.className = "text-sm text-gray-500";
-        cond.textContent = `Condition: ${item.itemCondition || "Unknown"}`;
+      const cond = document.createElement("span");
+      cond.className = "inline-block text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full mr-2 mb-2";
+      cond.textContent = `Condition: ${item.itemCondition || "Unknown"}`;
 
-        const act = document.createElement("p");
-        act.className = "text-sm text-gray-500";
-        act.textContent = `Action: ${item.itemAction || "Unknown"}`;
+      const act = document.createElement("span");
+      act.className = "inline-block text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full mr-2 mb-2";
+      act.textContent = `Action: ${item.itemAction || "Unknown"}`;
 
-        const loc = document.createElement("p");
-        loc.className = "text-sm text-gray-500";
-        loc.textContent = `Location: ${item.location || "N/A"}`;
+      const loc = document.createElement("p");
+      loc.className = "text-sm text-gray-500 mt-1";
+      loc.textContent = `📍 Location: ${item.location || "N/A"}`;
 
-        // Append all to card
-        card.appendChild(title);
-        card.appendChild(desc);
-        card.appendChild(cond);
-        card.appendChild(act);
-        card.appendChild(loc);
-        dateSection.appendChild(card);
+      card.appendChild(title);
+      card.appendChild(desc);
+      card.appendChild(cond);
+      card.appendChild(act);
+      card.appendChild(loc);
+
+      dateSection.appendChild(card);
     });
 
     container.appendChild(dateSection);
-  }
+  });
 }
 
 
@@ -126,4 +138,3 @@ onAuthStateChanged(auth, async (user) => {
     `;
   }
 });
-//posted.js
