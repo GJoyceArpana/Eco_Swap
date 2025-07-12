@@ -10,11 +10,19 @@
   <div class="max-w-3xl mx-auto mt-10 p-4 bg-white rounded shadow">
     <h1 class="text-2xl font-bold mb-4 text-center text-blue-600">Your Requested Items</h1>
     <div id="requestedItems" class="space-y-4">
-      <!-- Requested items will be loaded here -->
+      <!-- Requested items will load here -->
     </div>
   </div>
 
-  <script type="module" src="firebase-config.js"></script>
-  <script type="module" src="reqitemp.js"></script>
+  <!-- ✅ Firebase classic SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <!-- ✅ Your Firebase config -->
+  <script src="firebase-config.js"></script>
+
+  <!-- ✅ Your logic -->
+  <script src="reqJeevitha.js"></script>
 </body>
 </html>
