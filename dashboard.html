@@ -15,6 +15,12 @@
   <link rel="icon" href="./logo.png" type="image/x-icon" />
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js"></script>
+
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -157,6 +163,8 @@
 
     #theme-toggle {
       background-color: transparent !important;
+      border: none;
+      cursor: pointer;
     }
     body.dark #icon-sun {
       display: block !important;
@@ -165,6 +173,20 @@
     body:not(.dark) #icon-moon {
       display: block !important;
       color: black;
+    }
+
+    input:disabled,
+    select:disabled,
+    textarea:disabled {
+      background-color: #f3f4f6;
+      color: #6b7280;
+      cursor: not-allowed;
+    }
+    body.dark input:disabled,
+    body.dark select:disabled,
+    body.dark textarea:disabled {
+      background-color: #374151;
+      color: #9ca3af;
     }
   </style>
 </head>
@@ -181,7 +203,7 @@
     <!-- Theme Toggle -->
     <button id="theme-toggle" aria-label="Toggle dark/light mode" class="px-4 py-2 rounded-md text-white hover:bg-accent transition flex items-center" type="button">
       <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M18.364 18.364l-1.414-1.414M6.05 6.05L4.636 4.636M12 8a4 4 0 100 8 4 4 0 000-8z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M18.364 18.364l-1.414-1.414M6.05 6.05L4.636 4.636" />
       </svg>
       <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="currentColor" viewBox="0 0 24 24">
         <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" />
@@ -197,7 +219,7 @@
       </div>
 
       <nav class="flex flex-col mt-2 space-y-1 px-4 flex-grow">
-        <a href="dashboard.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Profile</a>
+        <a href="dashboard.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white active">Profile</a>
         <a href="newitem.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Add New Item</a>
         <a href="posted.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">My Posted Items</a>
         <a href="reqitemp.html" class="rounded-md px-4 py-3 hover:bg-secondary text-white">Request New Item</a>
@@ -219,22 +241,22 @@
 
           <div>
             <label for="name" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Name</label>
-            <input id="name" type="text" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="Your full name" required />
+            <input id="name" type="text" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="Your full name" required disabled />
           </div>
 
           <div>
             <label for="email" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Email</label>
-            <input id="email" type="email" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="example@gmail.com" required />
+            <input id="email" type="email" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="example@gmail.com" required disabled />
           </div>
 
           <div>
             <label for="phone" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Phone</label>
-            <input id="phone" type="tel" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="7975745570" />
+            <input id="phone" type="tel" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="7975745570" disabled />
           </div>
 
           <div>
             <label for="gender" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Gender</label>
-            <select id="gender" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200">
+            <select id="gender" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" disabled>
               <option value="">Select gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -244,12 +266,12 @@
 
           <div>
             <label for="birthday" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">Birthday</label>
-            <input id="birthday" type="date" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" />
+            <input id="birthday" type="date" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" disabled />
           </div>
 
           <div>
             <label for="about" class="block text-gray-700 dark:text-gray-300 font-semibold mb-2">About Me</label>
-            <textarea id="about" rows="5" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="Tell us something about yourself..."></textarea>
+            <textarea id="about" rows="5" class="w-full rounded-md px-4 py-2 dark:bg-gray-700 dark:text-gray-200" placeholder="Tell us something about yourself..." disabled></textarea>
           </div>
 
           <div class="flex justify-end space-x-2">
@@ -261,65 +283,7 @@
     </section>
   </main>
 
-  <script>
-    const profileImage = document.getElementById('profile-image');
-    const imageInput = document.getElementById('profile-image-input');
-    const formInputs = document.querySelectorAll('#profile-form input, #profile-form select, #profile-form textarea');
-    const saveBtn = document.getElementById('save-profile');
-    const editBtn = document.getElementById('edit-profile');
-
-    function toggleEdit(enable) {
-      formInputs.forEach(input => {
-        input.disabled = !enable;
-        input.classList.toggle('opacity-60', !enable);
-      });
-      saveBtn.classList.toggle('hidden', !enable);
-      editBtn.classList.toggle('hidden', enable);
-    }
-
-    toggleEdit(false);
-
-    editBtn.addEventListener('click', () => toggleEdit(true));
-    saveBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleEdit(false);
-    });
-
-    profileImage.addEventListener('click', () => {
-      if (!profileImage.classList.contains('opacity-60')) {
-        imageInput.click();
-      }
-    });
-
-    imageInput.addEventListener('change', () => {
-      const file = imageInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = e => profileImage.src = e.target.result;
-        reader.readAsDataURL(file);
-      }
-    });
-
-    const themeToggle = document.getElementById('theme-toggle');
-    const sunIcon = document.getElementById('icon-sun');
-    const moonIcon = document.getElementById('icon-moon');
-
-    function updateThemeIcon() {
-      if (document.body.classList.contains('dark')) {
-        sunIcon.style.display = 'block';
-        moonIcon.style.display = 'none';
-      } else {
-        sunIcon.style.display = 'none';
-        moonIcon.style.display = 'block';
-      }
-    }
-
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      updateThemeIcon();
-    });
-
-    updateThemeIcon();
-  </script>
+  <script src="./firebase-config.js"></script>
+  <script src="./dashboard.js"></script>
 </body>
 </html>
