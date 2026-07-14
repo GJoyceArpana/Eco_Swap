@@ -1,39 +1,41 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const toggleBtn = document.getElementById("theme-toggle");
-  const themeIcon = document.getElementById("theme-icon");
+  // ===== Theme Toggle =====
+  const themeToggle = document.getElementById("theme-toggle");
+  const sunIcon = document.getElementById("icon-sun");
+  const moonIcon = document.getElementById("icon-moon");
   const body = document.body;
 
-  // Theme icon logic
-  const updateThemeIcon = () => {
+  function updateThemeIcon() {
     if (body.classList.contains("dark")) {
-      themeIcon.textContent = "☀"; // Sun
-      themeIcon.style.color = "white";
+      sunIcon.style.display = "block";
+      moonIcon.style.display = "none";
     } else {
-      themeIcon.textContent = "🌙"; // Moon
-      themeIcon.style.color = "#1e293b"; // dark gray-blue
+      sunIcon.style.display = "none";
+      moonIcon.style.display = "block";
     }
-  };
+  }
 
   // Initialize theme from localStorage
   if (localStorage.getItem("theme") === "dark") {
     body.classList.add("dark");
-  } else {
-    body.classList.remove("dark");
   }
   updateThemeIcon();
 
-  toggleBtn.addEventListener("click", () => {
+  themeToggle.addEventListener("click", () => {
     body.classList.toggle("dark");
     localStorage.setItem("theme", body.classList.contains("dark") ? "dark" : "light");
     updateThemeIcon();
   });
 
-  // Profile image upload
+  // ===== Profile Image Upload =====
   const profileImage = document.getElementById("profile-image");
   const profileImageInput = document.getElementById("profile-image-input");
 
   profileImage.addEventListener("click", () => {
-    profileImageInput.click();
+    const isEditMode = !document.getElementById("edit-profile").classList.contains("hidden");
+    if (isEditMode) {
+      profileImageInput.click();
+    }
   });
 
   profileImageInput.addEventListener("change", (event) => {
@@ -46,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     reader.readAsDataURL(file);
   });
 
-  // Profile form edit/save functionality
+  // ===== Profile Form Edit/Save =====
   const form = document.getElementById("profile-form");
   const saveBtn = document.getElementById("save-profile");
   const editBtn = document.getElementById("edit-profile");
@@ -54,37 +56,67 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setFormEditable(editable) {
     inputs.forEach((input) => {
+      if (input.id === "profile-image-input") return; // Skip hidden file input
       if (editable) {
-        input.removeAttribute("readonly");
         input.removeAttribute("disabled");
       } else {
-        if (input.tagName.toLowerCase() === "select") {
-          input.disabled = true;
-        } else {
-          input.readOnly = true;
-        }
+        input.disabled = true;
       }
     });
   }
 
+  function toggleEditMode(enable) {
+    setFormEditable(enable);
+    saveBtn.classList.toggle("hidden", !enable);
+    editBtn.classList.toggle("hidden", enable);
+    profileImage.style.cursor = enable ? "pointer" : "default";
+  }
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    // Optional: Save logic can be added here
+    
+    // Collect form data
+    const profileData = {
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      gender: document.getElementById("gender").value,
+      birthday: document.getElementById("birthday").value,
+      about: document.getElementById("about").value,
+    };
+
+    // Save to localStorage (or Firebase in the future)
+    localStorage.setItem("userProfile", JSON.stringify(profileData));
+    
+    console.log("Profile saved:", profileData);
     alert("Profile saved successfully!");
 
-    setFormEditable(false);
-    saveBtn.classList.add("hidden");
-    editBtn.classList.remove("hidden");
+    toggleEditMode(false);
   });
 
   editBtn.addEventListener("click", () => {
-    setFormEditable(true);
-    saveBtn.classList.remove("hidden");
-    editBtn.classList.add("hidden");
+    toggleEditMode(true);
   });
 
-  // Initially not editable
-  setFormEditable(false);
-  saveBtn.classList.add("hidden");
-  editBtn.classList.remove("hidden");
+  // ===== Load Profile Data =====
+  function loadProfileData() {
+    const saved = localStorage.getItem("userProfile");
+    if (saved) {
+      try {
+        const profileData = JSON.parse(saved);
+        document.getElementById("name").value = profileData.name || "";
+        document.getElementById("email").value = profileData.email || "";
+        document.getElementById("phone").value = profileData.phone || "";
+        document.getElementById("gender").value = profileData.gender || "";
+        document.getElementById("birthday").value = profileData.birthday || "";
+        document.getElementById("about").value = profileData.about || "";
+      } catch (err) {
+        console.error("Error loading profile:", err);
+      }
+    }
+  }
+
+  // Initialize
+  loadProfileData();
+  toggleEditMode(false);
 });
